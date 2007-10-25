@@ -1,0 +1,8 @@
+CREATE TABLE transaction
+(
+	transaction_id INTEGER(3) NOT NULL PRIMARY KEY AUTOINCREMENT,
+	created	INTEGER(3) NOT NULL,
+	server TEXT(32) NOT NULL,
+	payload BLOB NOT NULL,
+
+)	

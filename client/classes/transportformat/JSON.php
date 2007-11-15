@@ -14,16 +14,7 @@
  */
 class Pmq_Client_TransportFormat_JSON extends Pmq_Client_TransportFormat_Abstract
 {
-	
-	/**
-	 * @depricated ???
-	 */
-	public function formatData(array $data)
-	{
-		return json_encode($data);
-	}
-	
-    
+
     /** 
      * Encode an item into JSON format.
      *

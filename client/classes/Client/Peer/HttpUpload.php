@@ -1,5 +1,5 @@
 <?php
-class pmq_Client_Peer_Http extends pmq_Client_Peer_Abstract
+class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
 {
     public function connect()
     {

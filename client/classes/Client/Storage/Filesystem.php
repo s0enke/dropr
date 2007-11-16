@@ -37,12 +37,12 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 	    $this->path = realpath($path);
 	}
 	
-    public function put(pmq_Client_Peer_Abstract $peer, &$message)
+    public function put(pmq_Client_Message $message)
     {
         // Check the peer-dir
         
-        $inPath = $this->getPeerSpoolPath($peer, self::SPOOLDIR_TYPE_IN) . DIRECTORY_SEPARATOR;
-        $spoolPath = $this->getPeerSpoolPath($peer, self::SPOOLDIR_TYPE_IN) . DIRECTORY_SEPARATOR;
+        $inPath = $this->getPeerSpoolPath($message->getPeer(), self::SPOOLDIR_TYPE_IN) . DIRECTORY_SEPARATOR;
+        $spoolPath = $this->getPeerSpoolPath($message->getPeer(), self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
 
         $badName = true;
         while ($badName) {
@@ -57,14 +57,15 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         }
         $messageArray = array(
             "mId" => $msgId,
-            "msg" => &$message
+            "msg" => $message->getMessage()
         );
     
         fwrite($fh, serialize($messageArray));
         fclose($fh);
     
-        // CHECK!
-        rename($inPath . $msgId, $spoolPath . $msgId);
+        if (!rename($inPath . $msgId, $spoolPath . $msgId)) {
+            throw new pmq_Client_Exception("Could not move spoolfile!");
+        }
     }
 		
     /**
@@ -121,18 +122,6 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         
         return $path;
         
-    }
-
-    private function createMessage($len, $chars = '0123456789 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz')
-    {
-        $charsSize = strlen($chars)-1;
-        $string = '';
-        for ($i = 0; $i < $len; $i++)
-        {
-            $pos = rand(0, $charsSize);
-            $string .= $chars{$pos};
-        }
-        return $string;
     }
     
     private function getMsgId()

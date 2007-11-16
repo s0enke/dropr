@@ -12,14 +12,14 @@ class ClientApiTest extends PHPUnit_Framework_TestCase
         require '../../client/classes/autoload.php';		
 
         $this->client = new pmq_Client(
-            pmq_Client_Storage_Abstract::factory('filesystem', '/tmp/myqueue'),
-            pmq_Client_Peer_Abstract::getInstance('tcp', 'tcp://192.168.0.1:8000')
+            pmq_Client_Storage_Abstract::factory('filesystem', '/tmp/myqueue')
         );
 	}
 	
 	public function testPut()
 	{
-		$this->client->sendMessage('bernd');
+		$peer = pmq_Client_Peer_Abstract::getInstance('HttpUpload', 'tcp://192.168.0.1:8000');
+	    $this->client->sendMessage(new pmq_Client_Message($blah = 'bernd', $peer));
 	}
 	
 }

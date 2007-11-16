@@ -29,7 +29,7 @@ class ClientApiTest extends PHPUnit_Framework_TestCase
 	    $this->client->sendMessage(new pmq_Client_Message($blah = 'bernd', $peer));
 	    
 	    echo "\n\n";
-	    $this->storage->getQueuedHandles();
+	    var_dump($this->storage->getQueuedHandles());
 	}
 	
 }

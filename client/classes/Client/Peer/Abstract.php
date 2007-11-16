@@ -34,6 +34,6 @@ abstract class pmq_Client_Peer_Abstract
         return $this->transportMethod;
     }
     
-    abstract public function send(array $handles, pmq_Client_Storage_Abstract $storage);    
+    abstract public function send(array &$handles, pmq_Client_Storage_Abstract $storage);    
     
 }

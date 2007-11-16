@@ -92,7 +92,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
     /**
      * 
      */
-    public function getMessage($peer, $messageId)
+    public function getMessage($messageId, pmq_Client_Peer $peer)
     {
         return $this->getPeerSpoolPath($peer, self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR . $messageId;
     }
@@ -146,4 +146,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         return TYPE_FILE;
     }
     
+    public function checkSentHandles($handles, $peerDsn) {
+         
+    }
 }

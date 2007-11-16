@@ -1,10 +1,16 @@
+#!/usr/bin/php
 <?php
 require realpath(dirname(__FILE__) . '/..') . '/classes//autoload.php';
+
+if (!isset($argv[2])) {
+    echo "usage: $argv[0] <storage-type> <storage-dsn>\n";
+    exit;
+}
 
 /*
  * Config
  */
-$storage = new pmq_Client_Storage_Abstract();
+$storage = pmq_Client_Storage_Abstract::factory($argv[1], $argv[2]);
 
 
 while (true) {

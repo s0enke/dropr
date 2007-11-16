@@ -3,30 +3,25 @@ class pmq_Client
 {
 	
 	/**
-	 * @var	PMQ_Client_Storage_Abstract
+	 * @var	pmq_Client_Storage
 	 */
     private $storage;
 	
 	/**
-	 * @var string
+	 * @var pmq_Client_Peer
 	 */
     private $peer;
 	
-	public function __construct(PMQ_Client_Storage $storage, $peer)
+	public function __construct(pmq_Client_Storage $storage, pmq_Client_Peer $peer)
 	{
 		$this->storage = $storage;
-		
-		/*
-		 * @todo 	check peer!
-		 */
-		
 		$this->peer = $peer;
 	}
 	
 	public function sendMessage($message)
 	{
 		// notify queue via ipc ?!
-		$this->storage->put($this->peer, message);
+		$this->storage->put($this->peer, $message);
 	}
 	
 }

@@ -81,11 +81,17 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         unset($peers[0]);
         unset($peers[1]);
         
-        foreach($peers as $peer) {
-            $messages[$this->decodePeerDirectory($peer)] = scandir($spoolDir.DIRECTORY_SEPARATOR.$peer);
-            unset($messages[0]);
-            unset($messages[1]);
+        foreach ($peers as $peer) {
+            $decodedPeerDir = $this->decodePeerDirectory($peer);
+            $peerMessages = scandir($spoolDir.DIRECTORY_SEPARATOR.$peer);
+            
+            // unset ".." and "."
+            unset($peerMessages[0]);
+            unset($peerMessages[1]);
+            
+            $messages[$decodedPeerDir] = $peerMessages; 
         }
+        
         return $messages;
     }
     
@@ -118,7 +124,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 
     private function decodePeerDirectory($url)
     {
-        return base64_encode($url);
+        return base64_decode($url);
     }
     
     private function getSpoolPath($type = self::SPOOLDIR_TYPE_IN)

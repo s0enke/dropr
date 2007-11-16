@@ -9,8 +9,8 @@ abstract class pmq_Client_Peer_Abstract
     {
         if (!isset(self::$instances[$url])) {
             // Guess the classname from the url
-            $className = 'pmq_Peer_' . ucfirst($type);
-            self::$instances[$url] = new $transportName($url);
+            $className = 'pmq_Client_Peer_' . ucfirst($type);
+            self::$instances[$url] = new $className($url);
         }
         
         return self::$instances[$url];

@@ -20,7 +20,7 @@ abstract class pmq_Client_Storage_Abstract
 	/**
      * @return int	identifier of the message in queue
      */
-    abstract public function put(pmq_Client_Peer $peer, $message);
+    abstract public function put(pmq_Client_Peer_Abstract $peer, &$message);
     
     /**
      * returns the most recent messages  out of the storage ordered by 

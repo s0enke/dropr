@@ -15,25 +15,22 @@ $storage = pmq_Client_Storage_Abstract::factory($argv[1], $argv[2]);
 
 while (true) {
     
-    if (!$messages = $storage->getRecentMessages()) {
+    while (!$queuedHandles = $storage->getQueuedHandles()) {
         // wait for ipc signal or sleep
-        sleep(1);
         echo "sleeping\n";
+        sleep(1);
     }
     
-    $sortedMessages = array();
-    foreach ($messages as $message) {
-        $sortedMessages[$message->getDsn()][] = $message;
+    foreach ($queuedHandles as $peerDsn => $peerHandles) {
+        if (!list($method, $url) = explode(';', $peerDsn)) {
+            echo "Peer $peer is obstructed!\n";
+            continue;
+        }
+        $peer = pmq_Client_Peer_Abstract::getInstance($method, $url);
+        $result = $peer->send($peerHandles, $storage);
+
+        $storage->checkSentHandles($result, $peerDsn);
     }
     
-    foreach ($sortedMessages as $dsn => $peerMessages) {
-        $peer = pmq_Client_Peer_ConnectionPool::getPeer($dsn);
-        $result = $peer->put($peerMessages);
-        
-        // peerMessages as Klasse mit sschalter streamable
-    }
-    
-    unset($messages);
-    unset($sortedMessages);
-    
+    unset($queuedHandles);
 }

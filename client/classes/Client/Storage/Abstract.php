@@ -1,6 +1,10 @@
 <?php
 abstract class pmq_Client_Storage_Abstract
 {
+    const TYPE_STREAM = 1;
+    const TYPE_MEMORY = 2;
+    const TYPE_FILE   = 3;
+
     private static $instances = array();
     
     private $dsn;
@@ -33,6 +37,8 @@ abstract class pmq_Client_Storage_Abstract
     /**
      * @return pmq_Client_Message
      */
-    abstract public function getMessage($messageId);
+    abstract public function getMessage($messageId, pmq_Client_Peer $peer);
+    
+    abstract public function getType();
     
 }

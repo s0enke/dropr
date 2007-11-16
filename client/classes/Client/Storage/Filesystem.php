@@ -74,22 +74,33 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
      * 
      * @return array	An array of pmq_Client_Message objects 
      */
-    public function getRecentMessages($limit = null)
+    public function getQueuedHandles($limit = null)
     {
-        return array();
+        $spoolDir = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL);
+        $peers = scandir($spoolDir);
+        unset($peers[0]);
+        unset($peers[1]);
+        
+        foreach($peers as $peer) {
+            $messages[$this->decodePeerDirectory($peer)] = scandir($spoolDir.DIRECTORY_SEPARATOR.$peer);
+            unset($messages[0]);
+            unset($messages[1]);
+        }
+        return $messages;
     }
     
     /**
-     * @return pmq_Client_Message
+     * 
      */
-    public function getMessage($messageId)
+    public function getMessage($peer, $messageId)
     {
-        
+        return $this->getPeerSpoolPath($peer, self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR . $messageId;
     }
     
     private function getPeerSpoolPath(pmq_Client_Peer_abstract $peer, $type = self::SPOOLDIR_TYPE_IN)
     {
-        $path = $this->getSpoolPath($type) . DIRECTORY_SEPARATOR . $this->encodePeerDirectory($peer->getUrl());
+        $path = $this->getSpoolPath($type) . DIRECTORY_SEPARATOR .
+            $this->encodePeerDirectory($peer->getTransportMethod().';'.$peer->getUrl());
 
         if (!is_dir($path)) {
             if (!mkdir($path, 0775)) {
@@ -129,6 +140,10 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         $tName = (string)microtime();
         $spPos = strpos($tName, ' ');
         return substr($tName, $spPos+1).'-'.substr($tName, 2, $spPos-2);
+    }
+    
+    public function getType() {
+        return TYPE_FILE;
     }
     
 }

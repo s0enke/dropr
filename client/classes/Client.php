@@ -12,7 +12,7 @@ class pmq_Client
 	 */
     private $peer;
 	
-	public function __construct(pmq_Client_Storage $storage, pmq_Client_Peer $peer)
+	public function __construct(pmq_Client_Storage_Abstract $storage, pmq_Client_Peer_Abstract $peer)
 	{
 		$this->storage = $storage;
 		$this->peer = $peer;

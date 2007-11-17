@@ -110,7 +110,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 
         if (!is_dir($path)) {
             if (!mkdir($path, 0775)) {
-                throw new pmq_Client_Exception("Could not created directory $path!");
+                throw new pmq_Client_Exception("Could not create directory $path!");
             }
         }
         
@@ -152,10 +152,19 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         return TYPE_FILE;
     }
     
-    public function checkSentHandles($handles, $peer) {
-        foreach ($handles as $k => $fStruct) {
-            if ($fStruct['inqueue']) {
-                unlink($dir.$fStruct['name']);
+    public function checkSentHandles($fNames, $result, $peer) {
+        $peerKey = $peer->key;
+        $spoolPath = $this->getPeerSpoolPath($peerKey, self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
+        $sentPath = $this->getPeerSpoolPath($peerKey, self::SPOOLDIR_TYPE_SENT) . DIRECTORY_SEPARATOR;
+
+        foreach ($fNames as $k => $fName) {
+
+            $msgId = basename($fName);
+
+            if (isset($result[$msgId]['inqueue']) && ($result[$msgId]['inqueue'] === true)) {
+                if (!rename($spoolPath . $msgId, $sentPath . $msgId)) {
+                    throw new pmq_Client_Exception("Could not move spoolfile!");
+                }                
             }
         }
         

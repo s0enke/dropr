@@ -19,6 +19,9 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
     
     private function httpFileUpload($fNames) {
 
+        foreach ($fNames as $k => $fName) {
+            $fNames[$k] = '@'.$fName;
+        }
         // ACHTUNG: extremes Geloet!!!
 
         $connomains = array(

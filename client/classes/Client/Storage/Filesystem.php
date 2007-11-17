@@ -47,7 +47,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         $badName = true;
         while ($badName) {
 
-            $fName = join('-', array(
+            $fName = join('_', array(
                 $priority,
                 $this->getTimeStamp(),
                 $peer
@@ -104,7 +104,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 
         $messageHandles = array();
         foreach($fNames as $k => $fName) {
-            list($priority, $timeStamp, $encodedPeerKey) = explode($fName);
+            list($priority, $timeStamp, $encodedPeerKey) = explode('_', $fName, 3);
             $messageHandles[$this->decodePeerKey($encodedPeerKey)][$k] = $spoolDir . $fName;
         }
 

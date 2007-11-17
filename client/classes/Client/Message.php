@@ -31,6 +31,7 @@ class pmq_Client_Message
         return $this->message;
     }
     public function queue() {
-         $this->queue->putMessage($this);
+        print_r($this->queue);
+        $this->queue->putMessage($this);
     }
 }

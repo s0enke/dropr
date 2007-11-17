@@ -1,6 +1,9 @@
 <?php
 class pmq_Client_Message
 {
+    /**
+	 * @var pmq_Client
+	 */
     private $queue;
     private $payload;    
     private $peer;
@@ -28,6 +31,6 @@ class pmq_Client_Message
         return $this->message;
     }
     public function queue() {
-         $queue->storage->saveMessage($this);
+         $this->queue->putMessage($this);
     }
 }

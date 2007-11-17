@@ -86,7 +86,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
             unset($messages[1]);
             
             foreach ($messages as $k => $v) {
-                $messages[$k] = '@'.$peerSpoolDir.DIRECTORY_SEPARATOR.$v;
+                $messages[$k] = $peerSpoolDir.DIRECTORY_SEPARATOR.$v;
             }
 
             $messageHandles[$this->decodePeerDirectory($peerDir)] = $messages; 
@@ -133,7 +133,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         
         if (!is_dir($path)) {
             if (!mkdir($path, 0775)) {
-                throw new pmq_Client_Exception("Could not created directory $path!");
+                throw new pmq_Client_Exception("Could not create directory $path!");
             }
         }
         
@@ -152,7 +152,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         return TYPE_FILE;
     }
     
-    public function checkSentHandles($handles, $peerDsn) {
+    public function checkSentHandles($handles, $peer) {
         foreach ($handles as $k => $fStruct) {
             if ($fStruct['inqueue']) {
                 unlink($dir.$fStruct['name']);

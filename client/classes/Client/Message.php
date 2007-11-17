@@ -19,7 +19,7 @@ class pmq_Client_Message
         $this->queue = $queue;
         $this->payload = &$message;
         $this->peer = $peer;
-        $this->queue = $priority;
+        $this->priority = $priority;
         $this->sync = $sync;
     }
 

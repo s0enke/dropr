@@ -10,7 +10,7 @@ abstract class pmq_Client_Peer_Abstract
     public static function getInstance($method, $url=false)
     {
         if ($url === false) {
-            list($method, $url) = explode($method);
+            list($method, $url) = explode(';', $method);
         }
 
         $key = $method.';'.$url;

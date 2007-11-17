@@ -1,22 +1,32 @@
 <?php
 class pmq_Server_Message
 {
-    private $id;
+    private $storage;
+    
+    private $client;
+    
+    private $messageId;
     
     /**
      * The Message, can be content, stream or a file
      * 
      * @var mixed 
      */
-    private $handle;
+    private $message;
     
-    private $storage;
+    private $state = 'wurst';
     
-    private $state;
+    private $priority;
+
+    private $sync;
     
-    public function __construct(pmq_Server_Storage_Abstract $storage)
+    public function __construct(pmq_Server_Storage_Abstract $storage, $client, $messageId, &$message, $priority)
     {
         $this->storage = $storage;
+        $this->client = $client;
+        $this->messageId = $messageId;
+        $this->message =& $message;
+        $this->priority = $this->priority;
     }
     
     public function getId()
@@ -38,6 +48,14 @@ class pmq_Server_Message
      * @return mixed
      */
     public function getMessage()
+    {
+        
+    }
+    
+    /**
+     * sets the message to the processed state 
+     */
+    public function setProcessed()
     {
         
     }

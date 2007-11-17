@@ -46,11 +46,10 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 
         $badName = true;
         while ($badName) {
-            $timeStamp = $this->getMsgId();
-            
+
             $fName = join('-', array(
                 $priority,
-                $timeStamp,
+                $this->getTimeStamp(),
                 $peer
             ));
             

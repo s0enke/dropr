@@ -22,7 +22,7 @@ class ClientApiTest extends PHPUnit_Framework_TestCase
 
 	public function testPut()
 	{
-		$peer = pmq_Client_Peer_Abstract::getInstance('HttpUpload', 'http://192.168.178.252/');
+		$peer = pmq_Client_Peer_Abstract::getInstance('HttpUpload', 'http://soenkepmqserver/server/server.php');
 	    $msg = $this->queue->createMessage($_message = 'bernd', $peer);
 	    $msg->queue();
 	    

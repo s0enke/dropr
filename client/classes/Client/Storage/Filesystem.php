@@ -125,7 +125,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
     private function getPeerSpoolPath(pmq_Client_Peer_Abstract $peer, $type = self::SPOOLDIR_TYPE_IN)
     {
         $path = $this->getSpoolPath($type) . DIRECTORY_SEPARATOR .
-            $this->encodePeerDirectory($peer->getKey());
+            $this->encodePeerKey($peer->getKey());
 
         if (!is_dir($path)) {
             if (!mkdir($path, 0775)) {

@@ -30,12 +30,17 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
 
     private function httpFileUpload(array $messages) {
 
-        $uploadFields = array();
+        $fNamesCurl = array();
+        
+        // set the client name
+        // XXX: geloet
+        $fNamesCurl['client'] = `hostname`;
+        
         foreach ($messages as $k => $message) {
             $uploadFields['m_' . $k] = array(
-                message   => 'f_' . $k,
-                messageId => $message->messageId,
-                priority  => $message->priorty
+                'message'   => 'f_' . $k,
+                'messageId' => $message->messageId,
+                'priority'  => $message->priorty
             );
             $uploadFields['f_' . $k] = '@' . $message->getMessage->getFilename();
         }
@@ -75,7 +80,7 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
         }
         
         if ($mrc != CURLM_OK) {
-            print "Curl multi read error $mrc\n";
+            throw new pmq_Client_Exception("Curl multi read error $mrc");
         }
         
         // retrieve data
@@ -83,13 +88,19 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
             if (($err = curl_error($conn[$i])) == '') {
                 $res[$i]=curl_multi_getcontent($conn[$i]);
             } else {
-                print "Curl error on handle $i: $err\n";
+                throw new pmq_Client_Exception("Curl error on handle $i: $err");
             }
             curl_multi_remove_handle($mh,$conn[$i]);
             curl_close($conn[$i]);
         }
         curl_multi_close($mh);
         
-        return unserialize($res[0]);
+        echo $res[0];
+        
+        if (!$return = unserialize($res[0])) {
+            throw new pmq_Client_Exception("Could not unserialize the result!");;
+        }
+        
+        return $return;
     }
 }

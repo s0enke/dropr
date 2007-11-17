@@ -7,13 +7,15 @@ abstract class pmq_Client_Peer_Abstract
     private $peerUrl;
     private $key;
 
-    public static function getInstance($method, $url=false)
+    public static function getInstance($method, $url = false)
     {
         if ($url === false) {
-            list($method, $url) = explode(';', $method);
+            if (!list($method, $url) = explode(';', $method)) {
+                throw new pmq_Client_Exception("Could not explode method and url from '$method'");
+            }
         }
 
-        $key = $method.';'.$url;
+        $key = $method . ';' . $url;
         if (!isset(self::$instances[$key])) {
             // Guess the classname from transport method
             $className = 'pmq_Client_Peer_' . ucfirst($method);

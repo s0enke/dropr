@@ -101,7 +101,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 
             $message = new pmq_Client_Message(
                 NULL,
-                new SplFileInfo($fName),
+                new SplFileInfo($spoolDir . $fName),
                 pmq_Client_Peer_Abstract::getInstance($decodedPeerKey),
                 $priority
             );

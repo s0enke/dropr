@@ -95,7 +95,23 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
      * 
      * @return array	An array of pmq_Client_Message objects 
      */
-    public function getQueuedHandles($limit = null)
+    
+    public function getQueuedHandles($limit = null) {
+        $spoolDir = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
+        $fNames = scandir($spoolDir);
+        unset($fNames[0]);
+        unset($fNames[1]);
+
+        $messageHandles = arrays();
+        foreach($fNames as $k => $fName) {
+            list($priority, $timeStamp, $encodedPeerKey) = explode($fname);
+            $messageHandles[$this->decodePeerKey($encodedPeerKey)][$k] = $spoolDir . $fName;
+        }
+
+        return messageHandles;
+    }
+
+    public function oldGetQueuedHandles($limit = null)
     {
         $spoolDir = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL);
         $peerDirs = scandir($spoolDir);

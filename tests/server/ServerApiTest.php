@@ -3,12 +3,12 @@ class ServerApiTest extends PHPUnit_Framework_TestCase
 {
 	
 	/**
-	 * @var pmq_Server
+	 * @var pmq_Server_Transport_Abstract
 	 */
     private $server;
     
     /**
-     * @var pmq_Client_Storage_Abstract
+     * @var pmq_Server_Storage_Abstract
      */
     private $storage;
     
@@ -21,6 +21,13 @@ class ServerApiTest extends PHPUnit_Framework_TestCase
         $this->server = pmq_Server_Transport_Abstract::factory(
         	'HttpUpload',
             $this->storage = pmq_Server_Storage_Abstract::factory('filesystem', '/tmp/myserverqueue')
+        );
+        
+        $_SERVER['X-pmq-client'] = 'testhorst1';
+        
+        $_FILES['schnulli'] = array(
+            'tmp_name' => '/tmp/blubb',
+            'name' => 'schnulli',
         );
 	}
 	

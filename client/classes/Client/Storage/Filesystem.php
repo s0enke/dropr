@@ -48,12 +48,8 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         while ($badName) {
             $msgId = $this->getMsgId();
             $fName = $inPath . $msgId;
-            echo $fName;
             $fh = @fopen($fName, 'x');
             $badName = ($fh === false);
-            if ($badName) {
-                echo '*';
-            }
         }
 
         fwrite($fh, $message->getMessage());
@@ -77,6 +73,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         unset($peerDirs[0]);
         unset($peerDirs[1]);
         
+        $messageHandles = array();
         foreach ($peerDirs as $peerDir) {
             $peerSpoolDir = $spoolDir.DIRECTORY_SEPARATOR.$peerDir;
             $messages = scandir($peerSpoolDir);
@@ -89,7 +86,9 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
                 $messages[$k] = $peerSpoolDir.DIRECTORY_SEPARATOR.$v;
             }
 
-            $messageHandles[$this->decodePeerDirectory($peerDir)] = $messages; 
+            if (count($messages)) {
+                $messageHandles[$this->decodePeerDirectory($peerDir)] = $messages;
+            } 
         }
         
         return $messageHandles;
@@ -103,7 +102,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         return $this->getPeerSpoolPath($peer, self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR . $messageId;
     }
     
-    private function getPeerSpoolPath(pmq_Client_Peer_abstract $peer, $type = self::SPOOLDIR_TYPE_IN)
+    private function getPeerSpoolPath(pmq_Client_Peer_Abstract $peer, $type = self::SPOOLDIR_TYPE_IN)
     {
         $path = $this->getSpoolPath($type) . DIRECTORY_SEPARATOR .
             $this->encodePeerDirectory($peer->getKey());
@@ -149,15 +148,14 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
     }
     
     public function getType() {
-        return TYPE_FILE;
+        return self::TYPE_FILE;
     }
     
-    public function checkSentHandles($fNames, $result, $peer) {
-        $peerKey = $peer->key;
-        $spoolPath = $this->getPeerSpoolPath($peerKey, self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
-        $sentPath = $this->getPeerSpoolPath($peerKey, self::SPOOLDIR_TYPE_SENT) . DIRECTORY_SEPARATOR;
+    public function checkSentHandles(pmq_Client_Peer_Abstract $peer, array $handles, $result) {
+        $spoolPath = $this->getPeerSpoolPath($peer, self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
+        $sentPath = $this->getPeerSpoolPath($peer, self::SPOOLDIR_TYPE_SENT) . DIRECTORY_SEPARATOR;
 
-        foreach ($fNames as $k => $fName) {
+        foreach ($handles as $k => $fName) {
 
             $msgId = basename($fName);
 

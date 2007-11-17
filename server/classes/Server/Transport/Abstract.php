@@ -19,7 +19,7 @@ abstract class pmq_Server_Transport_Abstract
     }
     
     /**
-     * @return pmq_Server_Storage
+     * @return pmq_Server_Storage_Abstract
      */
     protected function getStorage()
     {
@@ -29,6 +29,6 @@ abstract class pmq_Server_Transport_Abstract
     /**
      * Handles the Server process
      */
-    abstract public function handle(); 
+    abstract public function handle();
     
 }

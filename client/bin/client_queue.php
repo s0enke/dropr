@@ -21,6 +21,8 @@ while (true) {
         sleep(1);
     }
     
+    var_dump($queuedHandles);
+    
     foreach ($queuedHandles as $peerKey => $peerHandles) {
 
         $peer = pmq_Client_Peer_Abstract::getInstance($peerKey);

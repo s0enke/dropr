@@ -10,17 +10,18 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
     {
         // messages zusammentueten und in einem rutsch versenden
         
-        if ($storage->getType == pmq_Client_Storage_Abstract::TYPE_FILE) {
-            return $this->httpFileUpload($fName);
+        if ($storage->getType() == pmq_Client_Storage_Abstract::TYPE_FILE) {
+            return $this->httpFileUpload($handles);
         } else {
             throw new Exception("not implemented");
         }
     }
     
-    private function httpFileUpload($fNames) {
+    private function httpFileUpload(array $fNames) {
 
+        $fNamesCurl = array();
         foreach ($fNames as $k => $fName) {
-            $fNames[$k] = '@'.$fName;
+            $fNamesCurl['c_' . $k] = '@' . $fName;
         }
         // ACHTUNG: extremes Geloet!!!
 
@@ -35,7 +36,7 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
             
             curl_setopt($conn[$i], CURLOPT_URL, $url);
             curl_setopt($conn[$i], CURLOPT_POST, true);
-            curl_setopt($conn[$i], CURLOPT_POSTFIELDS, $fNames);
+            curl_setopt($conn[$i], CURLOPT_POSTFIELDS, $fNamesCurl);
             
             curl_setopt($conn[$i], CURLOPT_RETURNTRANSFER, 1);
             
@@ -72,7 +73,7 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
             curl_close($conn[$i]);
         }
         curl_multi_close($mh);
-
+        
         return unserialize($res[0]);
     }
 }

@@ -15,6 +15,7 @@ class pmq_Client_Message
     private $priority;
     private $sync;
 
+    private $messageId = NULL;
     private $state = NULL;
 
     public function __construct(pmq_Client $queue = NULL, &$message = NULL, pmq_Client_Peer_Abstract $peer = NULL, $priority = 9, $sync = NULL) 
@@ -44,6 +45,6 @@ class pmq_Client_Message
         return $this->priority;
     }
     public function queue() {
-        $this->queue->putMessage($this);
+        $this->messageId = $this->queue->putMessage($this);
     }
 }

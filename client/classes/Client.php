@@ -14,8 +14,10 @@ class pmq_Client
 
 	public function putMessage(&$message)
 	{
+
+		$messageId = $this->storage->saveMessage(&$message);
 		// notify queue via ipc ?!
-		$this->storage->saveMessage(&$message);
+		return $messageId;
 	}
 
 	public function createMessage(&$message = NULL, $peer = NULL, $priority = 9, $sync = NULL)

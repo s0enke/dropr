@@ -23,7 +23,8 @@ class ClientApiTest extends PHPUnit_Framework_TestCase
 	public function testPut()
 	{
 		$peer = pmq_Client_Peer_Abstract::getInstance('HttpUpload', 'http://192.168.178.252/');
-	    $this->queue->createMessage($_message = 'bernd', $peer)->queue();
+	    $msg = $this->queue->createMessage($_message = 'bernd', $peer);
+	    $msg->queue();
 	    
 	    echo "\n\n";
 	    var_dump($this->storage->getQueuedMessages());

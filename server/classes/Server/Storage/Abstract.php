@@ -16,4 +16,6 @@ abstract class pmq_Server_Storage_Abstract
     
     abstract public function put(pmq_Server_Message $message);
     
+    abstract public function getMessages($type = null);
+    
 }

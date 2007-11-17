@@ -63,8 +63,14 @@ class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract
         
     }
     
-    public function getType() {
+    public function getType()
+    {
         return self::TYPE_FILE;
+    }
+    
+    public function getMessages($type = null)
+    {
+            
     }
     
 }

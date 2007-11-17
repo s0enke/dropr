@@ -28,7 +28,7 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
         }
     }
 
-    private function httpFileUpload(array $messages) {
+    private function httpFileUpload(array &$messages) {
 
         $uploadFields = array();
         
@@ -36,14 +36,18 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
         // XXX: geloet
         $uploadFields['client'] = `hostname`;
         
+        $metaData = array();
         foreach ($messages as $k => $message) {
-            $uploadFields['m_' . $k] = serialize(array(
+            $metaData[$k] = array(
                 'message'   => 'f_' . $k,
                 'messageId' => $message->getId(),
                 'priority'  => $message->getPriority()
-            ));
+            );
             $uploadFields['f_' . $k] = '@' . $message->getMessage()->getPathname();
         }
+        
+        $uploadFields['metaData'] = serialize($metaData);
+        
         // ACHTUNG: extremes Geloet!!!
 
         $connomains = array(

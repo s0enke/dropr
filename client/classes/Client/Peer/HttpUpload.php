@@ -40,7 +40,7 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
             $uploadFields['m_' . $k] = array(
                 'message'   => 'f_' . $k,
                 'messageId' => $message->getId(),
-                'priority'  => $message->getPriorty()
+                'priority'  => $message->getPriority()
             );
             $uploadFields['f_' . $k] = '@' . $message->getMessage->getFilename();
         }

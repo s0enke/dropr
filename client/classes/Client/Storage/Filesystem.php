@@ -73,22 +73,26 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
     public function getQueuedHandles($limit = null)
     {
         $spoolDir = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL);
-        $peers = scandir($spoolDir);
+        $peerDirs = scandir($spoolDir);
         unset($peers[0]);
         unset($peers[1]);
         
-        foreach ($peers as $peer) {
-            $decodedPeerDir = $this->decodePeerDirectory($peer);
-            $peerMessages = scandir($spoolDir.DIRECTORY_SEPARATOR.$peer);
+        foreach ($peerDirs as $peerDir) {
+            $peerSpoolDir = $spoolDir.DIRECTORY_SEPARATOR.$peerDir;
+            $messages = scandir($peerSpoolDir);
             
             // unset ".." and "."
             unset($peerMessages[0]);
             unset($peerMessages[1]);
             
-            $messages[$decodedPeerDir] = $peerMessages; 
+            foreach ($messages as $k => $v) {
+                $messages[$k] = '@'.$peerSpoolDir.DIRECTORY_SEPARATOR.$v;
+            }
+
+            $messageHandles[$this->decodePeerDirectory($peerDir)] = $messages; 
         }
         
-        return $messages;
+        return $messageHandles;
     }
     
     /**
@@ -102,7 +106,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
     private function getPeerSpoolPath(pmq_Client_Peer_abstract $peer, $type = self::SPOOLDIR_TYPE_IN)
     {
         $path = $this->getSpoolPath($type) . DIRECTORY_SEPARATOR .
-            $this->encodePeerDirectory($peer->getTransportMethod().';'.$peer->getUrl());
+            $this->encodePeerDirectory($peer->getKey());
 
         if (!is_dir($path)) {
             if (!mkdir($path, 0775)) {

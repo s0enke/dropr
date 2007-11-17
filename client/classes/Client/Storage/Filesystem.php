@@ -107,10 +107,10 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
             );
             $message->restoreId($fName);
 
-            $messageHandles[$decodedPeerKey][] = $message;
+            $messages[$decodedPeerKey][] = $message;
         }
 
-        return $messageHandles;
+        return $messages;
     }
     
 

@@ -190,7 +190,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
         $sentPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SENT) . DIRECTORY_SEPARATOR;
 
-        foreach ($message as $k => $message) {
+        foreach ($messages as $k => $message) {
 
             $msgId = $message->getId();
 

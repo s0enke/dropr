@@ -28,14 +28,6 @@ class ClientApiTest extends PHPUnit_Framework_TestCase
 	    
 	    echo "\n\n";
 	    var_dump($this->storage->getQueuedMessages());
-	    $msgsbp = $this->storage->getQueuedMessages();
-	    foreach ($msgsbp as $k => $msgs) {
-	        foreach ($msgs as $l => $msg)
-	        print serialize($msg);
-	        print "\n";
-	        break;
-	    }
-	    break;
 	}
 	
 }

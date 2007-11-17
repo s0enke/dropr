@@ -41,5 +41,5 @@ abstract class pmq_Client_Storage_Abstract
     
     abstract public function getType();
 
-    abstract public function checkSentHandles($handles, $peerDsn); 
+    abstract public function checkSentHandles($peer, $handles, $result); 
 }

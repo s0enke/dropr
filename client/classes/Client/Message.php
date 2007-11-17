@@ -14,6 +14,8 @@ class pmq_Client_Message
 
     public function __construct(pmq_Client $queue = NULL, &$message = NULL, $peer = NULL, $priority = NULL, $sync = NULL) 
     {
+        var_dump($queue);
+
         $this->queue = $queue;
         $this->payload = &$message;
         $this->peer = $peer;

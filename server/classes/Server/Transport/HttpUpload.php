@@ -13,6 +13,9 @@ class pmq_Server_Transport_HttpUpload extends pmq_Server_Transport_Abstract
         $return = array();
         foreach ($_FILES as $k => $fStruct) {
             if ($this->getStorage()->getType() === pmq_Server_Storage_Abstract::TYPE_FILE) {
+                
+                // XXX: erst move_uploaded_file für uns (security)
+                
                 $return[$fStruct['name']]['inqueue'] = move_uploaded_file(
                     $fStruct['tmp_name'],
                     $this->getStorage()->getDestination() . DIRECTORY_SEPARATOR . $fStruct['name']

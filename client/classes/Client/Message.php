@@ -12,7 +12,7 @@ class pmq_Client_Message
 
     private $state = NULL;
 
-    public function __construct($queue = NULL, &$message = NULL, $peer = NULL, $priority = NULL, $sync = NULL) 
+    public function __construct(pmq_Client $queue = NULL, &$message = NULL, $peer = NULL, $priority = NULL, $sync = NULL) 
     {
         $this->queue = $queue;
         $this->payload = &$message;
@@ -31,7 +31,6 @@ class pmq_Client_Message
         return $this->message;
     }
     public function queue() {
-        print_r($this->queue);
         $this->queue->putMessage($this);
     }
 }

@@ -37,7 +37,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 	    $this->path = realpath($path);
 	}
 	
-    public function put(pmq_Client_Message $message)
+    public function saveMessage(pmq_Client_Message $message)
     {
         // Check the peer-dir
         

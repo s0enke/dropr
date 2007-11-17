@@ -1,16 +1,21 @@
 <?php
 class pmq_Client_Message
 {
+    private $queue;
+    private $payload;    
     private $peer;
+    private $priority;
+    private $sync;
 
-    private $message;
+    private $state = NULL;
 
-    private $state;
-
-    public function __construct(&$message, pmq_Client_Peer_Abstract $peer) 
+    public function __construct($queue = NULL, &$message = NULL, $peer = NULL, $priority = NULL, $sync = NULL) 
     {
-        $this->message =& $message;
+        $this->queue = $queue;
+        $this->payload = &$message;
         $this->peer = $peer;
+        $this->queue = $priority;
+        $this->sync = $sync;
     }
 
     public function getPeer()
@@ -21,5 +26,8 @@ class pmq_Client_Message
     public function &getMessage()
     {
         return $this->message;
+    }
+    public function queue() {
+         $queue->storage->saveMessage($this);
     }
 }

@@ -24,7 +24,7 @@ abstract class pmq_Client_Storage_Abstract
 	/**
      * @return int	identifier of the message in queue
      */
-    abstract public function put(pmq_Client_Message $message);
+    abstract public function saveMessage(pmq_Client_Message $message);
     
     /**
      * returns the most recent messages  out of the storage ordered by 

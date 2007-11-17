@@ -31,7 +31,7 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
     private function httpFileUpload(array $messages) {
 
         $fNamesCurl = array();
-        foreach ($fNames as $k => $fName) {
+        foreach ($messages as $k => $fName) {
             $fNamesCurl['c_' . $k] = '@' . $fName;
         }
         // ACHTUNG: extremes Geloet!!!

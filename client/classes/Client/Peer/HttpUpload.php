@@ -32,8 +32,8 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
 
         $uploadFields = array();
         foreach ($messages as $k => $message) {
-            
-            $uploadFields['c_' . $k] = '@' . $fName;
+            $uploadFields['m_' . $k] = serialize($message);
+            $uploadFields['f_' . $k] = '@' . $message->getMessage->getFilenae();
         }
         // ACHTUNG: extremes Geloet!!!
 

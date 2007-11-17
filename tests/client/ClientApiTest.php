@@ -31,8 +31,7 @@ class ClientApiTest extends PHPUnit_Framework_TestCase
 	    $msgsbp = $this->storage->getQueuedMessages();
 	    foreach ($msgsbp as $k => $msgs) {
 	        foreach ($msgs as $l => $msg)
-	        print $msg->getMessage()->getPathname();
-	        print $msg->getMessage()->getFilename();
+	        print serialize($msg);
 	        print "\n";
 	        break;
 	    }

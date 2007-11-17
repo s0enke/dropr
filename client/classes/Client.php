@@ -20,7 +20,6 @@ class pmq_Client
 
 	public function createMessage(&$message = NULL, $peer = NULL, $priority = NULL, $sync = NULL)
 	{
-	    var_dump($this);
 	    return new pmq_Client_Message($this, &$message, $peer, $priority, $sync);
 	}
 	

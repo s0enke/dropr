@@ -15,20 +15,20 @@ $storage = pmq_Client_Storage_Abstract::factory($argv[1], $argv[2]);
 
 while (true) {
     
-    while (!$queuedHandles = $storage->getQueuedHandles()) {
+    while (!$queuedMessages = $storage->getQueuedMessages()) {
         // wait for ipc signal or sleep
         echo "sleeping\n";
         sleep(1);
     }
 
-    var_dump($queuedHandles);
+    #var_dump($queuedHandles);
 
-    foreach ($queuedHandles as $peerKey => $peerHandles) {
+    foreach ($queuedMessages as $peerKey => $peerMessages) {
 
         $peer = pmq_Client_Peer_Abstract::getInstance($peerKey);
-        $result = $peer->send($peerHandles, $storage);
+        $result = $peer->send($peerMessages, $storage);
 
-        $storage->checkSentHandles($peer, $peerHandles, $result);
+        $storage->checkSentHandles($peer, $peerMessages, $result);
     }
 
     unset($queuedHandles);

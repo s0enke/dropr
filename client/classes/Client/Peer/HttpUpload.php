@@ -30,11 +30,11 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
 
     private function httpFileUpload(array $messages) {
 
-        $fNamesCurl = array();
+        $uploadFields = array();
         
         // set the client name
         // XXX: geloet
-        $fNamesCurl['client'] = `hostname`;
+        $uploadFields['client'] = `hostname`;
         
         foreach ($messages as $k => $message) {
             $uploadFields['m_' . $k] = array(
@@ -57,7 +57,7 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
             
             curl_setopt($conn[$i], CURLOPT_URL, $url);
             curl_setopt($conn[$i], CURLOPT_POST, true);
-            curl_setopt($conn[$i], CURLOPT_POSTFIELDS, $fNamesCurl);
+            curl_setopt($conn[$i], CURLOPT_POSTFIELDS, $uploadFields);
             
             curl_setopt($conn[$i], CURLOPT_RETURNTRANSFER, 1);
             

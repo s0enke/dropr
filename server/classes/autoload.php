@@ -10,7 +10,7 @@
  */
 set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__)));
 
-function pmq_Server_Autoload($className)
+function pmq_Client_Autoload($className)
 {
   	$file = substr(str_replace('_', '/', $className), 4) . '.php';
     echo $file . "\n";
@@ -18,4 +18,4 @@ function pmq_Server_Autoload($className)
   	require realpath(dirname(__FILE__)) . '/' . $file;
 }
 
-spl_autoload_register('pmq_Server_Autoload');
+spl_autoload_register('pmq_Client_Autoload');

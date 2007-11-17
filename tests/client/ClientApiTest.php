@@ -26,7 +26,7 @@ class ClientApiTest extends PHPUnit_Framework_TestCase
 	    $this->queue->createMessage($_message = 'bernd', $peer)->queue();
 	    
 	    echo "\n\n";
-	    var_dump($this->storage->getQueuedHandles());
+	    var_dump($this->storage->getQueuedMessages());
 	}
 	
 }

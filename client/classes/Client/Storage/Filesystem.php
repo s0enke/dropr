@@ -66,29 +66,6 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 
     }
 
-	public function oldSaveMessage(pmq_Client_Message $message)
-    {
-        // Check the peer-dir
-        
-        $inPath = $this->getPeerSpoolPath($message->getPeer(), self::SPOOLDIR_TYPE_IN) . DIRECTORY_SEPARATOR;
-        $spoolPath = $this->getPeerSpoolPath($message->getPeer(), self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
-
-        $badName = true;
-        while ($badName) {
-            $msgId = $this->getMsgId();
-            $fName = $inPath . $msgId;
-            $fh = @fopen($fName, 'x');
-            $badName = ($fh === false);
-        }
-
-        fwrite($fh, $message->getMessage());
-        fclose($fh);
-    
-        if (!rename($inPath . $msgId, $spoolPath . $msgId)) {
-            throw new pmq_Client_Exception("Could not move spoolfile!");
-        }
-    }
-		
     /**
      * returns the most recent messages  out of the storage ordered by 
      * 
@@ -104,41 +81,36 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 
         $messageHandles = array();
         foreach($fNames as $k => $fName) {
-            list($priority, $timeStamp, $encodedPeerKey) = explode('_', $fName, 3);
-            $messageHandles[$this->decodePeerKey($encodedPeerKey)][$k] = $spoolDir . $fName;
+            $messageHandles[$this->decodePeerKey($encodedPeerKey)][] = $spoolDir . $fName;
         }
 
         return $messageHandles;
     }
 
-    public function oldGetQueuedHandles($limit = null)
-    {
-        $spoolDir = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL);
-        $peerDirs = scandir($spoolDir);
-        unset($peerDirs[0]);
-        unset($peerDirs[1]);
-        
-        $messageHandles = array();
-        foreach ($peerDirs as $peerDir) {
-            $peerSpoolDir = $spoolDir.DIRECTORY_SEPARATOR.$peerDir;
-            $messages = scandir($peerSpoolDir);
-            
-            // unset ".." and "."
-            unset($messages[0]);
-            unset($messages[1]);
-            
-            foreach ($messages as $k => $v) {
-                $messages[$k] = $peerSpoolDir.DIRECTORY_SEPARATOR.$v;
-            }
+    public function getQueuedMessages($limit = null) {
+        $spoolDir = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
+        $fNames = scandir($spoolDir);
+        unset($fNames[0]);
+        unset($fNames[1]);
 
-            if (count($messages)) {
-                $messageHandles[$this->decodePeerKey($peerDir)] = $messages;
-            } 
+        $messages = array();
+        foreach($fNames as $k => $fName) {
+            list($priority, $timeStamp, $encodedPeerKey) = explode('_', $fName, 3);
+            $decodedPeerKey = $this->decodePeerKey($encodedPeerKey); 
+            $message = new pmq_Client_Message(
+                NULL,
+                new SplFileInfo($fName),
+                pmq_Client_Peer_Abstract::getInstance($decodedPeerKey),
+                $priority
+            );
+
+            $messageHandles[$decodedPeerKey][] = $message;
         }
-        
+
         return $messageHandles;
     }
     
+
     /**
      * 
      */
@@ -180,9 +152,8 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
                 throw new pmq_Client_Exception("Could not create directory $path!");
             }
         }
-        
+
         return $path;
-        
     }
     
     private function getTimeStamp()
@@ -197,8 +168,8 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
     }
     
     public function checkSentHandles(pmq_Client_Peer_Abstract $peer, array $handles, $result) {
-        $spoolPath = $this->getPeerSpoolPath($peer, self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
-        $sentPath = $this->getPeerSpoolPath($peer, self::SPOOLDIR_TYPE_SENT) . DIRECTORY_SEPARATOR;
+        $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
+        $sentPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SENT) . DIRECTORY_SEPARATOR;
 
         foreach ($handles as $k => $fName) {
 

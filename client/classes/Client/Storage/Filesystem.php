@@ -102,7 +102,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         unset($fNames[0]);
         unset($fNames[1]);
 
-        $messageHandles = arrays();
+        $messageHandles = array();
         foreach($fNames as $k => $fName) {
             list($priority, $timeStamp, $encodedPeerKey) = explode($fname);
             $messageHandles[$this->decodePeerKey($encodedPeerKey)][$k] = $spoolDir . $fName;

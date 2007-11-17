@@ -108,7 +108,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
             $messageHandles[$this->decodePeerKey($encodedPeerKey)][$k] = $spoolDir . $fName;
         }
 
-        return messageHandles;
+        return $messageHandles;
     }
 
     public function oldGetQueuedHandles($limit = null)

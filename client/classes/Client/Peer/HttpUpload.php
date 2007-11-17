@@ -37,11 +37,11 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
         $uploadFields['client'] = `hostname`;
         
         foreach ($messages as $k => $message) {
-            $uploadFields['m_' . $k] = array(
+            $uploadFields['m_' . $k] = serialize(array(
                 'message'   => 'f_' . $k,
                 'messageId' => $message->getId(),
                 'priority'  => $message->getPriority()
-            );
+            ));
             $uploadFields['f_' . $k] = '@' . $message->getMessage()->getPathname();
         }
         // ACHTUNG: extremes Geloet!!!

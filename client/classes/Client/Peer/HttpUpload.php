@@ -42,7 +42,7 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
                 'messageId' => $message->getId(),
                 'priority'  => $message->getPriority()
             );
-            $uploadFields['f_' . $k] = '@' . $message->getMessage()->getFilename();
+            $uploadFields['f_' . $k] = '@' . $message->getMessage()->getPathname();
         }
         // ACHTUNG: extremes Geloet!!!
 

@@ -21,15 +21,12 @@ while (true) {
         sleep(1);
     }
     
-    foreach ($queuedHandles as $peerDsn => $peerHandles) {
-        if (!list($method, $url) = explode(';', $peerDsn)) {
-            echo "Peer $peer is obstructed!\n";
-            continue;
-        }
-        $peer = pmq_Client_Peer_Abstract::getInstance($method, $url);
+    foreach ($queuedHandles as $peerKey => $peerHandles) {
+
+        $peer = pmq_Client_Peer_Abstract::getInstance($peerKey);
         $result = $peer->send($peerHandles, $storage);
 
-        $storage->checkSentHandles($result, $peerDsn);
+        $storage->checkSentHandles($result, $peer);
     }
     
     unset($queuedHandles);

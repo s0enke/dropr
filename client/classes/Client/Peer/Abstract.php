@@ -16,7 +16,7 @@ abstract class pmq_Client_Peer_Abstract
         $key = $method.';'.$url;
         if (!isset(self::$instances[$key])) {
             // Guess the classname from transport method
-            $className = 'pmq_Client_Peer_' . ucfirst($type);
+            $className = 'pmq_Client_Peer_' . ucfirst($method);
             self::$instances[$key] = new $className($method, $url);
         }
 

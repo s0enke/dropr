@@ -74,16 +74,16 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
     {
         $spoolDir = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL);
         $peerDirs = scandir($spoolDir);
-        unset($peers[0]);
-        unset($peers[1]);
+        unset($peerDirs[0]);
+        unset($peerDirs[1]);
         
         foreach ($peerDirs as $peerDir) {
             $peerSpoolDir = $spoolDir.DIRECTORY_SEPARATOR.$peerDir;
             $messages = scandir($peerSpoolDir);
             
             // unset ".." and "."
-            unset($peerMessages[0]);
-            unset($peerMessages[1]);
+            unset($messages[0]);
+            unset($messages[1]);
             
             foreach ($messages as $k => $v) {
                 $messages[$k] = '@'.$peerSpoolDir.DIRECTORY_SEPARATOR.$v;

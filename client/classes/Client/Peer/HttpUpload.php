@@ -51,7 +51,9 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
         );
         
         $mh = curl_multi_init();
-        
+
+        var_dump($uploadFields);
+
         foreach ($connomains as $i => $url) {
             $conn[$i] = curl_init();
             

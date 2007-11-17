@@ -28,7 +28,7 @@ while (true) {
         $peer = pmq_Client_Peer_Abstract::getInstance($peerKey);
         $result = $peer->send($peerMessages, $storage);
 
-        $storage->checkSentHandles($peer, $peerMessages, $result);
+        $storage->checkSentMessages($peerMessages, $result);
     }
 
     unset($queuedHandles);

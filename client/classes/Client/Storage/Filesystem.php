@@ -184,6 +184,23 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
                 }                
             }
         }
+    }
+
+    public function checkSentMessages(array $messages, $result) {
+        $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
+        $sentPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SENT) . DIRECTORY_SEPARATOR;
+
+        foreach ($message as $k => $message) {
+
+            $msgId = $mesage->getId();
+
+            if (isset($result[$msgId]['inqueue']) && ($result[$msgId]['inqueue'] === true)) {
+                if (!rename($spoolPath . $msgId, $sentPath . $msgId)) {
+                    throw new pmq_Client_Exception("Could not move spoolfile!");
+                }                
+            }
+        }
         
     }
+    
 }

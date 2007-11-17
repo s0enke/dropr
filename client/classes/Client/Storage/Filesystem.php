@@ -192,7 +192,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 
         foreach ($message as $k => $message) {
 
-            $msgId = $mesage->getId();
+            $msgId = $message->getId();
 
             if (isset($result[$msgId]['inqueue']) && ($result[$msgId]['inqueue'] === true)) {
                 if (!rename($spoolPath . $msgId, $sentPath . $msgId)) {

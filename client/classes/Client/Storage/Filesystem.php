@@ -55,12 +55,8 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
                 echo '*';
             }
         }
-        $messageArray = array(
-            "mId" => $msgId,
-            "msg" => $message->getMessage()
-        );
-    
-        fwrite($fh, serialize($messageArray));
+
+        fwrite($fh, $message->getMessage());
         fclose($fh);
     
         if (!rename($inPath . $msgId, $spoolPath . $msgId)) {
@@ -153,6 +149,11 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
     }
     
     public function checkSentHandles($handles, $peerDsn) {
-         
+        foreach ($handles as $k => $fStruct) {
+            if ($fStruct['inqueue']) {
+                unlink($dir.$fStruct['name']);
+            }
+        }
+        
     }
 }

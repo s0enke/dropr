@@ -5,19 +5,30 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
     {
         // hier connection aufbauen etc
     }
-    
-    public function send(array &$handles, pmq_Client_Storage_Abstract $storage)
+
+    public function send(array &$messages, pmq_Client_Storage_Abstract $storage)
     {
         // messages zusammentueten und in einem rutsch versenden
-        
+
+        if ($storage->getType() == pmq_Client_Storage_Abstract::TYPE_FILE) {
+            return $this->httpFileUpload($messages);
+        } else {
+            throw new Exception("not implemented");
+        }
+    }
+
+    public function oldSend(array &$handles, pmq_Client_Storage_Abstract $storage)
+    {
+        // messages zusammentueten und in einem rutsch versenden
+
         if ($storage->getType() == pmq_Client_Storage_Abstract::TYPE_FILE) {
             return $this->httpFileUpload($handles);
         } else {
             throw new Exception("not implemented");
         }
     }
-    
-    private function httpFileUpload(array $fNames) {
+
+    private function httpFileUpload(array $messages) {
 
         $fNamesCurl = array();
         foreach ($fNames as $k => $fName) {

@@ -36,8 +36,38 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 	    
 	    $this->path = realpath($path);
 	}
-	
-    public function saveMessage(pmq_Client_Message $message)
+
+    public function saveMessage(pmq_Client_Message $message) {
+        $inPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_IN) . DIRECTORY_SEPARATOR;
+        $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
+
+        $priority = $message->getPriority();
+        $peer = $this->encodePeerKey($message->getPeer()->getKey());
+
+        $badName = true;
+        while ($badName) {
+            $timeStamp = $this->getMsgId();
+            
+            $fName = join('-', array(
+                $priority,
+                $timeStamp,
+                $peer
+            ));
+            
+            $fh = @fopen($inPath . $fName, 'x');
+            $badName = ($fh === false);
+        }
+
+        fwrite($fh, $message->getMessage());
+        fclose($fh);
+    
+        if (!rename($inPath . $fName, $spoolPath . $fName)) {
+            throw new pmq_Client_Exception("Could not move spoolfile!");
+        }
+
+    }
+
+	public function oldSaveMessage(pmq_Client_Message $message)
     {
         // Check the peer-dir
         
@@ -87,7 +117,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
             }
 
             if (count($messages)) {
-                $messageHandles[$this->decodePeerDirectory($peerDir)] = $messages;
+                $messageHandles[$this->decodePeerKey($peerDir)] = $messages;
             } 
         }
         
@@ -116,12 +146,12 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         return $path;    
     }
     
-    private function encodePeerDirectory($url)
+    private function encodePeerKey($url)
     {
         return base64_encode($url);
     }
 
-    private function decodePeerDirectory($url)
+    private function decodePeerKey($url)
     {
         return base64_decode($url);
     }
@@ -140,7 +170,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         
     }
     
-    private function getMsgId()
+    private function getTimeStamp()
     {
         $tName = (string)microtime();
         $spPos = strpos($tName, ' ');

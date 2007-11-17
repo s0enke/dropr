@@ -18,7 +18,7 @@ class pmq_Client
 		$this->storage->saveMessage(&$message);
 	}
 
-	public function createMessage(&$message = NULL, $peer = NULL, $priority = NULL, $sync = NULL)
+	public function createMessage(&$message = NULL, $peer = NULL, $priority = 9, $sync = NULL)
 	{
 	    return new pmq_Client_Message($this, &$message, $peer, $priority, $sync);
 	}

@@ -96,13 +96,15 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         $messages = array();
         foreach($fNames as $k => $fName) {
             list($priority, $timeStamp, $encodedPeerKey) = explode('_', $fName, 3);
-            $decodedPeerKey = $this->decodePeerKey($encodedPeerKey); 
+            $decodedPeerKey = $this->decodePeerKey($encodedPeerKey);
+
             $message = new pmq_Client_Message(
                 NULL,
                 new SplFileInfo($fName),
                 pmq_Client_Peer_Abstract::getInstance($decodedPeerKey),
                 $priority
             );
+            $message->restoreId($fName);
 
             $messageHandles[$decodedPeerKey][] = $message;
         }

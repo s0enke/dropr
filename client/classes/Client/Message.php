@@ -41,10 +41,22 @@ class pmq_Client_Message
         return $this->peer;
     }
 
-    public function getPriority() {
+    public function getId()
+    {
+        return $this->messageId;
+    }
+    public function restoreId($messageId)
+    {
+        $this->messageId = $messageId;
+    }
+
+    public function getPriority()
+    {
         return $this->priority;
     }
-    public function queue() {
+
+    public function queue()
+    {
         $this->messageId = $this->queue->putMessage($this);
     }
 }

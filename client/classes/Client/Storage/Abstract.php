@@ -32,7 +32,7 @@ abstract class pmq_Client_Storage_Abstract
      * 
      * @return array	An array of pmq_Client_Message objects 
      */
-    abstract public function getQueuedHandles($limit = null);
+    abstract public function getQueuedMessages($limit = null);
     
     /**
      * @return pmq_Client_Message

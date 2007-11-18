@@ -66,32 +66,8 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         return $fName;
     }
 
-    /**
-     * returns the most recent messages  out of the storage ordered by 
-     * 
-     * 
-     * @return array	An array of pmq_Client_Message objects 
-     */
-    
-    public function getQueuedHandles($limit = null) {
-        $spoolDir = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
-        $fNames = scandir($spoolDir);
-        unset($fNames[0]);
-        unset($fNames[1]);
-
-        $messageHandles = array();
-        foreach($fNames as $k => $fName) {
-            list($priority, $timeStamp, $encodedPeerKey) = explode('_', $fName, 3);
-            $messageHandles[$this->decodePeerKey($encodedPeerKey)][] = $spoolDir . $fName;
-            if ($limit && $k > $limit) {
-                break;
-            }
-        }
-
-        return $messageHandles;
-    }
-
-    public function getQueuedMessages($limit = null) {
+    public function getQueuedMessages($limit = null)
+    {
         $spoolDir = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
         $fNames = scandir($spoolDir);
         unset($fNames[0]);
@@ -99,6 +75,11 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 
         $messages = array();
         foreach($fNames as $k => $fName) {
+
+            if ($limit && $k > $limit) {
+                break;
+            }
+                        
             list($priority, $timeStamp, $encodedPeerKey) = explode('_', $fName, 3);
             $decodedPeerKey = $this->decodePeerKey($encodedPeerKey);
 

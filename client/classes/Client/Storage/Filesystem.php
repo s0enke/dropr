@@ -154,22 +154,6 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         return self::TYPE_FILE;
     }
     
-    public function checkSentHandles(pmq_Client_Peer_Abstract $peer, array $handles, $result) {
-        $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
-        $sentPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SENT) . DIRECTORY_SEPARATOR;
-
-        foreach ($handles as $k => $fName) {
-
-            $msgId = basename($fName);
-
-            if (isset($result[$msgId]['inqueue']) && ($result[$msgId]['inqueue'] === true)) {
-                if (!rename($spoolPath . $msgId, $sentPath . $msgId)) {
-                    throw new pmq_Client_Exception("Could not move spoolfile!");
-                }                
-            }
-        }
-    }
-
     public function checkSentMessages(array $messages, $result) {
         $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
         $sentPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SENT) . DIRECTORY_SEPARATOR;
@@ -183,6 +167,8 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
                     throw new pmq_Client_Exception("Could not move spoolfile!");
                 }                
             }
+            
+            unset($message);
         }
         
     }

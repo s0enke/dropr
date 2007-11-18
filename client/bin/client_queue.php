@@ -39,7 +39,7 @@ while (true) {
         $storage->checkSentMessages($peerMessages, $result);
     }
 
-    unset($queuedMessages);
+    unset($queuedMessages, $peerMessages);
     #break;
 }
 

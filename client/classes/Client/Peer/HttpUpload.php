@@ -103,6 +103,8 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
         }
         curl_multi_close($mh);
         
+        echo $res[0]; exit;
+        
         if (!$return = unserialize($res[0])) {
             throw new pmq_Client_Exception("Could not unserialize the result!");;
         }

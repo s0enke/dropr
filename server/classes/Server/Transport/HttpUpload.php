@@ -56,7 +56,7 @@ class pmq_Server_Transport_HttpUpload extends pmq_Server_Transport_Abstract
         }
             
         // write the result back to the sender
-        echo serialize($return);    
+        echo serialize($return);
     
     }
     

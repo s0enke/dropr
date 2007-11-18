@@ -16,18 +16,44 @@ class ClientApiTest extends PHPUnit_Framework_TestCase
 	{
         require '../../client/classes/autoload.php';		
 
-        $this->storage = pmq_Client_Storage_Abstract::factory('filesystem', '/tmp/myqueue2');
+        $this->storage = pmq_Client_Storage_Abstract::factory('filesystem', '/home/soenke/pmqclientqueue');
         $this->queue = new pmq_Client($this->storage);
 	}
 
 	public function testPut()
 	{
 		$peer = pmq_Client_Peer_Abstract::getInstance('HttpUpload', 'http://soenkepmqserver/server/server.php');
-	    $msg = $this->queue->createMessage($_message = 'bernd', $peer);
-	    $msg->queue();
-	    
+
+    	$dt = time();
+        $i=0;
+        $m = $this->createMessage(1000);
+        
+        while ($i < 10000) {
+
+		    $msg = $this->queue->createMessage($m, $peer);
+	        $msg->queue();
+            $i++;
+            echo '.';
+        }
+        
+        $dt = time() - $dt;
+        echo $dt."\n";
 	    echo "\n\n";
-	    var_dump($this->storage->getQueuedMessages());
 	}
+	
+
+    function createMessage($len,
+        $chars = '0123456789 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz')
+    {
+        $charsSize = strlen($chars)-1;
+        $string = '';
+        for ($i = 0; $i < $len; $i++)
+        {
+            $pos = rand(0, $charsSize);
+            $string .= $chars{$pos};
+        }
+        return $string;
+    }
+	
 	
 }

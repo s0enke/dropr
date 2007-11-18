@@ -60,10 +60,10 @@ class pmq_Server_Transport_HttpUpload extends pmq_Server_Transport_Abstract
             }
         }
             
-        echo "Time after curl: ";
-        echo (time() - $time);
-        echo "\n";
-        exit;
+        #echo "Time after curl: ";
+        #echo (time() - $time);
+        #echo "\n";
+        #exit;
         
         // write the result back to the sender
         echo serialize($return);

@@ -29,7 +29,7 @@ class pmq_Server_Transport_HttpUpload extends pmq_Server_Transport_Abstract
             // xxx check the existence of the indexes
             $messageId  = $messageData['messageId'];
             $priority   = $messageData['priority'];
-            $messageRef = $messageData['message'];           
+            $messageRef = $messageData['message'];
 
             try {
 

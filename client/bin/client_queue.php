@@ -17,10 +17,10 @@ $storage = pmq_Client_Storage_Abstract::factory($argv[1], $argv[2]);
 $i = 0;
 while (true) {
     
-    while (!$queuedMessages = $storage->getQueuedMessages()) {
+    while (!$queuedMessages = $storage->getQueuedMessages(1000)) {
         // wait for ipc signal or sleep
         echo "sleeping\n";
-        #sleep(1);
+        sleep(1);
     }
     
     echo "got queue messages: " . (time() - $time) . "\n";
@@ -38,7 +38,7 @@ while (true) {
     }
 
     unset($queuedMessages);
-    break;
+    #break;
 }
 
 echo "Messages: $i\n";

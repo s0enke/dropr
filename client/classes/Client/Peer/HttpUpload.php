@@ -50,7 +50,7 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
         
         $uploadFields['metaData'] = serialize($metaData);
         
-        echo (time()  - $time()) . "\n";
+        echo (time()  - $time) . "\n";
         
         // ACHTUNG: extremes Geloet!!!
 

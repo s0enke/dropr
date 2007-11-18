@@ -37,16 +37,13 @@ class pmq_Server_Transport_HttpUpload extends pmq_Server_Transport_Abstract
                     throw new pmq_Server_Exception("message not in fileupload!");
                 }
                 
-                /// XXX tmp dir config
-                $tempName = tempnam('/tmp', 'pmq_');
-            
-                if (!move_uploaded_file($_FILES[$messageRef]['tmp_name'], $tempName)) {
+                if (!is_uploaded_file($_FILES[$messageRef]['tmp_name'])) {
                     // could not move the uploaded file - whyever
                     $return[$messageId]['inqueue'] = false;
                     continue;
                 }
                 
-                $file = new SplFileInfo($tempName);
+                $file = new SplFileInfo($_FILES[$messageRef]['tmp_name']);
                 $message = new pmq_Server_Message($client, $messageId, $file, $priority);
                 
                 $this->getStorage()->put($message);

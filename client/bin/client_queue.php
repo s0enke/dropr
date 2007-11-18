@@ -28,6 +28,8 @@ while (true) {
 
     foreach ($queuedMessages as $peerKey => $peerMessages) {
 
+        echo "Messages: " . count($peerMessages) . "\n";
+    
         $i += count($peerMessages);
         
         $peer = pmq_Client_Peer_Abstract::getInstance($peerKey);

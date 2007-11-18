@@ -17,7 +17,7 @@ $storage = pmq_Client_Storage_Abstract::factory($argv[1], $argv[2]);
 $i = 0;
 while (true) {
     
-    while (!$queuedMessages = $storage->getQueuedMessages(200)) {
+    while (!$queuedMessages = $storage->getQueuedMessages(500)) {
         // wait for ipc signal or sleep
         echo "sleeping\n";
         sleep(1);

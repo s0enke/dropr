@@ -58,9 +58,6 @@ function sendMessages(pmq_Client_Storage_Abstract $storage)
             sleep(1);
         }
         
-        echo "got queue messages: " . (time() - $time) . "\n";
-    
-    
         foreach ($queuedMessages as $peerKey => $peerMessages) {
     
             echo "Messages: " . count($peerMessages) . "\n";

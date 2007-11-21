@@ -51,6 +51,8 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
             } else {
                 throw new pmq_Client_Exception("Currently only file transport is implemented.");
             }
+            
+            echo $message->getId() . "\n";
         }
         
         $uploadFields['metaData'] = serialize($metaData);

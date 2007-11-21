@@ -9,9 +9,9 @@ $server = pmq_Server_Transport_Abstract::factory(
     pmq_Server_Storage_Abstract::factory('filesystem', '/tmp/myserverqueue3')
 );
 
-$directClass = new ServerDirectInvokeTest();
+#$directClass = new ServerDirectInvokeTest();
 
-$server->addDirectInvocationHandler($directClass);
+#$server->addDirectInvocationHandler($directClass);
         
 $server->handle();
 

@@ -48,24 +48,23 @@ if ($pid == -1) {
 function sendMessages(pmq_Client_Storage_Abstract $storage)
 {
     
-    echo getmypid() . "\n";
+    #echo getmypid() . "\n";
     
     while (true) {
         
         while (!$queuedMessages = $storage->getQueuedMessages(1000)) {
             // wait for ipc signal or sleep
-            echo "sleeping\n";
             sleep(1);
         }
         
         foreach ($queuedMessages as $peerKey => $peerMessages) {
     
-            echo "Messages: " . count($peerMessages) . "\n";
+            #echo "Messages: " . count($peerMessages) . "\n";
         
             $peer = pmq_Client_Peer_Abstract::getInstance($peerKey);
             $result = $peer->send($peerMessages, $storage);
     
-            echo "have sent queue: " . (time() - $time) . "\n";
+            #echo "have sent queue: " . (time() - $time) . "\n";
             $storage->checkSentMessages($peerMessages, $result);
         }
     

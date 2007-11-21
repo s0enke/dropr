@@ -18,14 +18,17 @@ class pmq_Server_Message
     
     private $priority;
 
+    private $time;
+
     private $sync;
     
-    public function __construct($client, $messageId, &$message, $priority, pmq_Server_Storage_Abstract $storage = null)
+    public function __construct($client, $messageId, &$message, $priority, $time = null, pmq_Server_Storage_Abstract $storage = null)
     {
         $this->client = $client;
         $this->messageId = $messageId;
         $this->message =& $message;
         $this->priority = $priority;
+        $this->time = $time;
         $this->storage = $storage;
     }
     
@@ -44,9 +47,23 @@ class pmq_Server_Message
         return $this->state;   
     }
     
+    public function getClient()
+    {
+        return $this->client;
+    }
+    
     public function __toString()
     {
+        if (!$this->storage) {
+            throw new pmq_Server_Exception("cannot output state if no storage is given!");
+        }
         
+        if ($this->message instanceof SplFileInfo) {
+            return file_get_contents($this->message->getPathname());
+        }
+        
+        // type not implemented
+        throw new Exception("not implemented");
     }
     
     /**
@@ -57,13 +74,10 @@ class pmq_Server_Message
         return $this->message;
     }
     
-    /**
-     * sets the message to the processed state 
-     */
-    public function setProcessed()
+    public function getTime()
     {
-        if (!$this->storage) {
-            throw new pmq_Server_Exception("cannot set message to processed state if no storage is given!");
-        }
+        return $this->time;
     }
+    
+    
 }

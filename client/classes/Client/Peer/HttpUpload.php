@@ -1,51 +1,56 @@
 <?php
 class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
 {
+    const TYPE_QUEUE = 1;
+    
+    const TYPE_DIRECT = 2;
+    
     public function connect()
     {
         // hier connection aufbauen etc
     }
 
-    public function send(array &$messages, pmq_Client_Storage_Abstract $storage)
+    public function send(array &$messages)
     {
-        // messages zusammentueten und in einem rutsch versenden
-
-        if ($storage->getType() == pmq_Client_Storage_Abstract::TYPE_FILE) {
-            return $this->httpFileUpload($messages);
-        } else {
-            throw new Exception("not implemented");
-        }
+        return $this->httpFileUpload($messages, self::TYPE_QUEUE);
     }
 
-    public function oldSend(array &$handles, pmq_Client_Storage_Abstract $storage)
-    {
-        // messages zusammentueten und in einem rutsch versenden
-
-        if ($storage->getType() == pmq_Client_Storage_Abstract::TYPE_FILE) {
-            return $this->httpFileUpload($handles);
-        } else {
-            throw new Exception("not implemented");
-        }
-    }
-
-    private function httpFileUpload(array &$messages) {
+    private function httpFileUpload(array &$messages, $type) {
 
         $uploadFields = array();
         
         // set the client name
         // XXX: geloet
-        $uploadFields['client'] = `hostname`;
+        $uploadFields['client'] = trim(`hostname`);
         
         $time = time();
         
         $metaData = array();
         foreach ($messages as $k => $message) {
+            /* @var $message pmq_Client_Message */
+            
             $metaData[$k] = array(
-                'message'   => 'f_' . $k,
-                'messageId' => $message->getId(),
-                'priority'  => $message->getPriority()
+                'message'       => 'f_' . $k,
+                'messageId'     => $message->getId(),
+                'priority'      => $message->getPriority(),
+                'messageType'	=> $type,
             );
-            $uploadFields['f_' . $k] = '@' . $message->getMessage()->getPathname();
+            
+            $content = &$message->getMessage();
+            if ($content instanceof SplFileInfo) {
+                // the message is a file, we can use curl directly
+                $uploadFields['f_' . $k] = '@' . $content->getPathname();
+            } elseif (is_string($content)) {
+                // message content is a string, we've to build a tempfile first
+                if (!$filename = tempnam('/tmp', 'pmq')) {
+                    throw new Exception();
+                }
+                if (!file_put_contents($filename, $content)) {
+                    throw new Exception();
+                }
+            } else {
+                throw new pmq_Client_Exception("Currently only file transport is implemented.");
+            }
         }
         
         $uploadFields['metaData'] = serialize($metaData);
@@ -106,9 +111,20 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
         #echo $res[0];
         
         if (!$return = unserialize($res[0])) {
+            // XXX NO exception but return false and LOG!!
             throw new pmq_Client_Exception("Could not unserialize the result!");;
         }
         
         return $return;
+    }
+    
+    public function poll(array $messageIds)
+    {
+        
+    }
+    
+    public function sendDirectly(pmq_Client_Message $message)
+    {
+        return $this->httpFileUpload($messages, self::TYPE_DIRECT);
     }
 }

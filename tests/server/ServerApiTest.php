@@ -1,39 +1,21 @@
 <?php
-class ServerApiTest extends PHPUnit_Framework_TestCase
-{
-	
-	/**
-	 * @var pmq_Server_Transport_Abstract
-	 */
-    private $server;
-    
-    /**
-     * @var pmq_Server_Storage_Abstract
-     */
-    private $storage;
-    
-    
-	
-	public function setUp()
-	{
-        require '../../server/classes/autoload.php';		
+require '../../server/classes/autoload.php';		
 
-        $this->server = pmq_Server_Transport_Abstract::factory(
-        	'HttpUpload',
-            $this->storage = pmq_Server_Storage_Abstract::factory('filesystem', '/tmp/myserverqueue')
-        );
-        
-        $_SERVER['X-pmq-client'] = 'testhorst1';
-        
-        $_FILES['schnulli'] = array(
-            'tmp_name' => '/tmp/blubb',
-            'name' => 'schnulli',
-        );
-	}
-	
-	public function testPut()
-	{
-	    $this->server->handle();
-	}
-	
+ini_set('error_log', '/tmp/pmq_server');
+ini_set('log_errors', 1);
+
+$storage = pmq_Server_Storage_Abstract::factory('filesystem', '/tmp/myserverqueue3');
+
+echo '<pre>';
+foreach ($storage->getMessages() as $message) {
+    
+    
+    echo "Time: " . date("H:i:s", $message->getTime()) . "\n";
+    echo "ID: " . $message->getId() . "\n";
+    echo "---------------------------------------------\n";
+    print_r(json_decode($message));
+    $storage->setProcessed($message);
+    
+    echo "\n-------------------------------------------\n\n\n";
+    
 }

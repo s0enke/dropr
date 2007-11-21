@@ -27,8 +27,8 @@ abstract class pmq_Client_Storage_Abstract
     abstract public function saveMessage(pmq_Client_Message $message);
     
     /**
-     * returns the most recent messages  out of the storage ordered by 
-     * 
+     * returns the most recent messages  out of the storage ordered by
+     * priority and create-time
      * 
      * @return array	An array of pmq_Client_Message objects 
      */
@@ -41,5 +41,5 @@ abstract class pmq_Client_Storage_Abstract
     
     abstract public function getType();
 
-    abstract public function checkSentMessages(array $messages, $result); 
+    abstract public function checkSentMessages(array &$messages, array &$result); 
 }

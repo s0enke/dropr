@@ -46,5 +46,19 @@ abstract class pmq_Client_Peer_Abstract
         return $this->key;
     }
 
-    abstract public function send(array &$handles, pmq_Client_Storage_Abstract $storage);    
+    abstract public function send(array &$messages);    
+
+    /**
+     * polls the peer for processed messages
+     */
+    abstract public function poll(array $messageIds);
+    
+    /**
+     * sends a message directly and give feedback immediately
+     * 
+     * @return string	the answer
+     * @throws	pmq_Client_Exception	If something went wrong 
+     */
+    abstract public function sendDirectly(pmq_Client_Message $message);
+    
 }

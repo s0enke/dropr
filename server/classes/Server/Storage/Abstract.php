@@ -5,6 +5,7 @@ abstract class pmq_Server_Storage_Abstract
     const TYPE_STREAM = 1;
     const TYPE_MEMORY = 2;
     const TYPE_FILE   = 3;
+
     
     public static function factory($type, $dsn)
     {
@@ -16,6 +17,14 @@ abstract class pmq_Server_Storage_Abstract
     
     abstract public function put(pmq_Server_Message $message);
     
-    abstract public function getMessages($type = null);
+    /**
+     * @return bool
+     */
+    abstract public function pollProcessed($messageId);
+    
+    /**
+     * @return array
+     */
+    abstract public function getMessages($type = null, $limit = null);
     
 }

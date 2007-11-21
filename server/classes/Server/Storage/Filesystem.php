@@ -37,7 +37,7 @@ class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract
             // xxx auslagern in eigene funktion
             
             $src = $message->getMessage()->getPathname();    
-            $dest = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR . $message->getPriority() . '_' . $message->getId();
+            $dest = $this->buildMessagePath($message, self::SPOOLDIR_TYPE_SPOOL);
             
 			/* @var $file SplFileInfo */
             
@@ -68,9 +68,54 @@ class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract
         return self::TYPE_FILE;
     }
     
-    public function getMessages($type = null)
+    public function getMessages($type = null, $limit = null)
     {
+        $spoolDir = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
+        $fNames = scandir($spoolDir);
+        
+        // unset the "." and the ".."
+        unset($fNames[0]);
+        unset($fNames[1]);
+
+        $messages = array();
+        foreach($fNames as $k => $fName) {
+
+            if ($limit && $k > $limit) {
+                break;
+            }
+                        
+            list($priority, $client, $messageId) = explode('_', $fName, 3);
             
+            $filename = $spoolDir . DIRECTORY_SEPARATOR . $fName; 
+
+            $message = new pmq_Server_Message($client, $messageId, new SplFileInfo($filename), $priority, filectime($filename), $this);
+
+            $messages[] = $message;
+        }
+
+        return $messages;
+    }
+    
+    public function setProcessed(pmq_Server_Message $message)
+    {
+        return rename($this->buildMessagePath($message, self::SPOOLDIR_TYPE_SPOOL), $this->buildMessagePath($message, self::SPOOLDIR_TYPE_PROCESSED));
+    }
+    
+    public function pollProcessed($messageId)
+    {
+        
+    }
+    
+    
+    /**
+     * Build the spoolpath for a message
+     */
+    private function buildMessagePath(pmq_Server_Message $message, $type)
+    {
+        /// XXX encode base64 ?
+        // build the path spoolpath/pri_client_msgid
+        //XXX is this good? client before ID sort!
+        return $this->getSpoolPath($type) . DIRECTORY_SEPARATOR . $message->getPriority() . '_' . $message->getClient() . '_' . $message->getId();        
     }
     
 }

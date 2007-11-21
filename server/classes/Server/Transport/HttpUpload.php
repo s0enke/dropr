@@ -4,17 +4,15 @@ class pmq_Server_Transport_HttpUpload extends pmq_Server_Transport_Abstract
     
     public function handle()
     {
-        
-        $time = time();
-        
-        
-        
         // check for the http header of the client
         if (!isset($_POST['client']) || !is_string($_POST['client'])) {
             throw new Exception("No client header set!");
         }
         
         $client = $_POST['client'];
+        
+        
+        // Try to get the method we are called
         
         // xxx check the check
         if (!isset($_POST['metaData']) || !is_string($_POST['metaData']) || (!$metadata = unserialize($_POST['metaData']))) {

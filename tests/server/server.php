@@ -8,5 +8,20 @@ $server = pmq_Server_Transport_Abstract::factory(
 	'HttpUpload',
     pmq_Server_Storage_Abstract::factory('filesystem', '/tmp/myserverqueue3')
 );
+
+$directClass = new ServerDirectInvokeTest();
+
+$server->addDirectInvocationHandler($directClass);
         
 $server->handle();
+
+class ServerDirectInvokeTest implements pmq_Server_DirectInvocation 
+{
+    
+    public function invokeMessage(pmq_Server_Message $message)
+    {
+        echo $message;
+        return true;
+    }
+    
+}

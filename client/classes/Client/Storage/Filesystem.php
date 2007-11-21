@@ -70,6 +70,8 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
     {
         $spoolDir = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
         $fNames = scandir($spoolDir);
+        
+        // unset the "." and the ".."
         unset($fNames[0]);
         unset($fNames[1]);
 
@@ -154,7 +156,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         return self::TYPE_FILE;
     }
     
-    public function checkSentMessages(array $messages, $result) {
+    public function checkSentMessages(array &$messages, array &$result) {
         $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
         $sentPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SENT) . DIRECTORY_SEPARATOR;
 

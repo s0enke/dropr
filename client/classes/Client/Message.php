@@ -12,17 +12,25 @@ class pmq_Client_Message
 	 */
     private $peer;
 
+    private $channel;
     private $priority;
     private $sync;
 
     private $messageId = NULL;
     private $state = NULL;
 
-    public function __construct(pmq_Client $queue = NULL, &$message = NULL, pmq_Client_Peer_Abstract $peer = NULL, $priority = 9, $sync = NULL) 
+    public function __construct(
+        pmq_Client $queue = NULL,
+        &$message = NULL,
+        pmq_Client_Peer_Abstract $peer = NULL,
+        $channel = 'common',
+        $priority = 9,
+        $sync = NULL)
     {
         $this->queue = $queue;
         $this->message = &$message;
         $this->peer = $peer;
+        $this->channel = $channel;
         $this->priority = $priority;
         $this->sync = $sync;
     }
@@ -53,6 +61,11 @@ class pmq_Client_Message
     public function getPriority()
     {
         return $this->priority;
+    }
+
+    public function getChannel()
+    {
+        return $this->channel;
     }
 
     public function queue()

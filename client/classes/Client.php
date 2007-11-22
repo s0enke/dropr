@@ -20,9 +20,20 @@ class pmq_Client
 		return $messageId;
 	}
 
-	public function createMessage(&$message = NULL, $peer = NULL, $priority = 9, $sync = NULL)
+	public function createMessage(
+	    &$message = NULL,
+	    $peer = NULL,
+	    $channel = 'common',
+	    $priority = 9,
+	    $sync = NULL)
 	{
-	    return new pmq_Client_Message($this, &$message, $peer, $priority, $sync);
+	    return new pmq_Client_Message(
+	        $this,
+	        &$message,
+	        $peer,
+	        $channel,
+	        $priority,
+	        $sync);
 	}
 	
 }

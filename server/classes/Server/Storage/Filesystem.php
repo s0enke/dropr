@@ -49,18 +49,17 @@ class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract
         }
     }
     
-    private function getSpoolPath($type)
+    private function getSpoolPath($type, $channel = 'common')
     {
-        $path = $this->path . DIRECTORY_SEPARATOR . $type;
+        $path = $this->path . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . base64_encode($channel);
         
         if (!is_dir($path)) {
-            if (!mkdir($path, 0775)) {
-                throw new pmq_Server_Exception("Could not created directory $path!");
+            if (!mkdir($path, 0775, true)) {
+                throw new pmq_Server_Exception("Could not create directory $path!");
             }
         }
         
         return $path;
-        
     }
     
     public function getType()
@@ -68,11 +67,11 @@ class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract
         return self::TYPE_FILE;
     }
     
-    public function getMessages($type = null, $limit = null)
+    public function getMessages($channel = 'common', $limit = null)
     {
-        $spoolDir = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
+        $spoolDir = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL, $channel) . DIRECTORY_SEPARATOR;
         $fNames = scandir($spoolDir);
-        
+
         // unset the "." and the ".."
         unset($fNames[0]);
         unset($fNames[1]);
@@ -86,9 +85,9 @@ class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract
                         
             list($priority, $client, $messageId) = explode('_', $fName, 3);
             
-            $filename = $spoolDir . DIRECTORY_SEPARATOR . $fName; 
+            $filePath = $spoolDir . DIRECTORY_SEPARATOR . $fName; 
 
-            $message = new pmq_Server_Message($client, $messageId, new SplFileInfo($filename), $priority, filectime($filename), $this);
+            $message = new pmq_Server_Message($client, $messageId, new SplFileInfo($filePath), $priority, filectime($filePath), $this);
 
             $messages[] = $message;
         }

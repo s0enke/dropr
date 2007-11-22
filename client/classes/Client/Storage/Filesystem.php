@@ -8,15 +8,15 @@
  */
 class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 {
-    
+
     const SPOOLDIR_TYPE_IN = 'in';
-    
+
     const SPOOLDIR_TYPE_SPOOL = 'proc';
-    
+
     const SPOOLDIR_TYPE_SENT = 'sent';
-    
+
     private $path;
-	
+
 	protected function __construct($path)
 	{
 	    
@@ -42,7 +42,8 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
 
         $priority = $message->getPriority();
-        $peer = $this->encodePeerKey($message->getPeer()->getKey());
+        $peer = $this->encodeForFs($message->getPeer()->getKey());
+        $channel = $this->encodeForFs($message->getChannel());
 
         $badName = true;
         while ($badName) {
@@ -50,16 +51,17 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
             $fName = join('_', array(
                 $priority,
                 $this->getTimeStamp(),
-                $peer
+                $peer,
+                $channel
             ));
-            
+
             $fh = @fopen($inPath . $fName, 'x');
             $badName = ($fh === false);
         }
 
         fwrite($fh, $message->getMessage());
         fclose($fh);
-    
+
         if (!rename($inPath . $fName, $spoolPath . $fName)) {
             throw new pmq_Client_Exception("Could not move spoolfile!");
         }
@@ -82,13 +84,15 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
                 break;
             }
                         
-            list($priority, $timeStamp, $encodedPeerKey) = explode('_', $fName, 3);
-            $decodedPeerKey = $this->decodePeerKey($encodedPeerKey);
+            list($priority, $timeStamp, $encodedPeerKey, $encodedChannel) = explode('_', $fName, 4);
+            $decodedPeerKey = $this->decodeFromFs($encodedPeerKey);
+            $decodedChannel = $this->decodeFromFs($encodedChannel);
 
             $message = new pmq_Client_Message(
                 NULL,
                 new SplFileInfo($spoolDir . $fName),
                 pmq_Client_Peer_Abstract::getInstance($decodedPeerKey),
+                $decodedChannel,
                 $priority
             );
             $message->restoreId($fName);
@@ -98,7 +102,6 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 
         return $messages;
     }
-    
 
     /**
      * 
@@ -107,31 +110,17 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
     {
         return $this->getPeerSpoolPath($peer, self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR . $messageId;
     }
-    
-    private function getPeerSpoolPath(pmq_Client_Peer_Abstract $peer, $type = self::SPOOLDIR_TYPE_IN)
-    {
-        $path = $this->getSpoolPath($type) . DIRECTORY_SEPARATOR .
-            $this->encodePeerKey($peer->getKey());
 
-        if (!is_dir($path)) {
-            if (!mkdir($path, 0775)) {
-                throw new pmq_Client_Exception("Could not create directory $path!");
-            }
-        }
-        
-        return $path;    
-    }
-    
-    private function encodePeerKey($url)
+    private function encodeForFs($val)
     {
-        return base64_encode($url);
+        return base64_encode($val);
     }
 
-    private function decodePeerKey($url)
+    private function decodeFromFs($val)
     {
-        return base64_decode($url);
+        return base64_decode($val);
     }
-    
+
     private function getSpoolPath($type = self::SPOOLDIR_TYPE_IN)
     {
         $path = $this->path . DIRECTORY_SEPARATOR . $type;

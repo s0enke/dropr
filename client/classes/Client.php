@@ -59,7 +59,8 @@ class pmq_Client
 	        $peer,
 	        $channel,
 	        $priority,
-	        $sync);
+	        $sync
+        );
 	}
 	
 }

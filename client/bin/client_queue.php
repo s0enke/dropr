@@ -27,11 +27,15 @@ function handleAlarm($sig)
 }
 pcntl_signal(SIGALRM, 'handleAlarm');
 
+$msgCount = 0;
 declare(ticks = 1);
-while ($continue == true) {
+while ($continue && ($msgCount < 1000)) {
     unset($queuedMessages, $peerMessages);
 
     if ($queuedMessages = $storage->getQueuedMessages(1000)) {
+
+        $msgCount += count($queuedMessages, COUNT_RECURSIVE);
+
         foreach ($queuedMessages as $peerKey => $peerMessages) {
     
             $peer = pmq_Client_Peer_Abstract::getInstance($peerKey);

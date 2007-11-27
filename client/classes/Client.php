@@ -55,7 +55,7 @@ class pmq_Client
 	{
 	    return new pmq_Client_Message(
 	        $this,
-	        &$message,
+	        $message,
 	        $peer,
 	        $channel,
 	        $priority,

@@ -41,7 +41,8 @@ case "$1" in
             echo "Cannot start $NAME more than once."
             echo
         else
-	    /sbin/start-stop-daemon --start --quiet --background \
+            /sbin/start-stop-daemon --start --quiet --background \
+                --chuid www-data:www-data \
                 --make-pidfile --pidfile $PIDFILE --exec $DAEMON
         fi
 	;;
@@ -54,11 +55,11 @@ case "$1" in
         else
             echo "Error: $PIDFILE not found. Could not stop $NAME."
             echo
-            ps ux | egrep -e"$NAME|_queue" | grep -v grep
+            ps aux | egrep -e"$NAME|_queue" | grep -v grep
         fi
 	;;
   status)
-        ps ux | egrep -e"$NAME|_queue" | grep -v grep
+        ps aux | egrep -e"$NAME|_queue" | grep -v grep
 	;;
   restart|force-reload)
 	;;

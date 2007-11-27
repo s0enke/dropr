@@ -43,7 +43,10 @@ class pmq_Client
         return $messageId;
     }
 
-	public function createMessage(
+	/**
+	 * @return pmq_Client_Message
+	 */
+    public function createMessage(
 	    &$message = NULL,
 	    $peer = NULL,
 	    $channel = 'common',

@@ -119,7 +119,7 @@ class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract
         /// XXX encode base64 ?
         // build the path spoolpath/pri_client_msgid
         //XXX is this good? client before ID sort!
-        return $this->getSpoolPath($type) . DIRECTORY_SEPARATOR . $message->getPriority() . '_' . $message->getClient() . '_' . $message->getId();        
+        return $this->getSpoolPath($type, $message->getChannel()) . DIRECTORY_SEPARATOR . $message->getPriority() . '_' . $message->getClient() . '_' . $message->getId();        
     }
     
 }

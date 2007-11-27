@@ -38,7 +38,12 @@ class pmq_Server_Message
     {
         return $this->messageId;
     }
-    
+
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+
     public function getPriority()
     {
         return $this->priority;

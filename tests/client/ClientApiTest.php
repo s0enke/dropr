@@ -26,11 +26,11 @@ class ClientApiTest extends PHPUnit_Framework_TestCase
 
     	$dt = time();
         $i=0;
-        // $m = $this->createMessage(1000);
+        $m = $this->createMessage(1000);
         
-        $m = "ich bin eine test message von " . date("H:m:i");
+        // $m = "ich bin eine test message von " . date("H:m:i");
         
-        while ($i < 1) {
+        while ($i < 1000) {
 
 		    $msg = $this->queue->createMessage($m, $peer);
 	        $msg->queue();

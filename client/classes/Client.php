@@ -12,7 +12,7 @@ class pmq_Client
 	public function __construct(pmq_Client_Storage_Abstract $storage)
 	{
 	    $ipcPath       = DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'droprIpc' . DIRECTORY_SEPARATOR;
-	    $channelName   = $ipcPath . hash('sha1', $storage->getDsn());
+	    $channelName   = $ipcPath . hash('sha1', realpath($storage->getDsn()));
         $this->storage = $storage;
 
         if (!is_dir($ipcPath)) {

@@ -31,7 +31,7 @@ class pmq_Client
 
     public function putMessage(&$message)
     {
-        $messageId = $this->storage->saveMessage(&$message);
+        $messageId = $this->storage->saveMessage($message);
 
         // notify queue via ipc
         $ipcStat = msg_stat_queue($this->ipcChannel);

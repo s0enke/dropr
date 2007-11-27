@@ -21,7 +21,7 @@ abstract class pmq_Client_Storage_Abstract
     }
 
     public function getDsn() {
-        return $dsn;
+        return $this->dsn;
     }
     
 	/**

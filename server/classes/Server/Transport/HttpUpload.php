@@ -26,6 +26,7 @@ class pmq_Server_Transport_HttpUpload extends pmq_Server_Transport_Abstract
             
             // xxx check the existence of the indexes
             $messageId  = $messageData['messageId'];
+            $channel    = $messageData['channel'];
             $priority   = $messageData['priority'];
             $messageRef = $messageData['message'];
 
@@ -42,7 +43,7 @@ class pmq_Server_Transport_HttpUpload extends pmq_Server_Transport_Abstract
                 }
                 
                 $file = new SplFileInfo($_FILES[$messageRef]['tmp_name']);
-                $message = new pmq_Server_Message($client, $messageId, $file, $priority);
+                $message = new pmq_Server_Message($client, $messageId, $file, $channel, $priority);
                 
                 $this->getStorage()->put($message);
                 

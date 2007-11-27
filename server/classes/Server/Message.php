@@ -13,20 +13,22 @@ class pmq_Server_Message
      * @var mixed 
      */
     private $message;
-    
+
     private $state = 'wurst';
     
+    private $channel;
     private $priority;
 
     private $time;
 
     private $sync;
     
-    public function __construct($client, $messageId, &$message, $priority, $time = null, pmq_Server_Storage_Abstract $storage = null)
+    public function __construct($client, $messageId, &$message, $channel = 'common', $priority = 9, $time = null, pmq_Server_Storage_Abstract $storage = null)
     {
         $this->client = $client;
         $this->messageId = $messageId;
         $this->message =& $message;
+        $this->channel = $channel;
         $this->priority = $priority;
         $this->time = $time;
         $this->storage = $storage;

@@ -29,26 +29,31 @@ class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract
 	    
 	    $this->path = realpath($path);
 	}
-	
+
     public function put(pmq_Server_Message $message)
     {
-        if ($message->getMessage() instanceof SplFileInfo) {
+        $mHandle = $message->getMessage();
+        if ($mHandle instanceof SplFileInfo) {
             // XXX typ!
             // xxx auslagern in eigene funktion
-            
-            $src = $message->getMessage()->getPathname();    
-            $dest = $this->buildMessagePath($message, self::SPOOLDIR_TYPE_SPOOL);
-            
+
+            $src  = $mHandle->getPathname();
+            $proc = $this->buildMessagePath($message, self::SPOOLDIR_TYPE_SPOOL);
+            $done = $this->buildMessagePath($message, self::SPOOLDIR_TYPE_PROCESSED);
+
 			/* @var $file SplFileInfo */
-            
-            if (!rename($src, $dest)) {
-                throw new pmq_Server_Exception("Could not save $src to $dest");
+
+            if (file_exists ($proc) || file_exists ($done)) {
+                return;
+            }
+            if (!rename($src, $proc)) {
+                throw new pmq_Server_Exception("Could not save $src to $proc");
             }
         } else {
             throw new pmq_Server_Exception('not implemented');
         }
     }
-    
+
     private function getSpoolPath($type, $channel = 'common')
     {
         $path = $this->path . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . base64_encode($channel);

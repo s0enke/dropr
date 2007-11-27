@@ -1,0 +1,71 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          skeleton
+# Required-Start:    $local_fs $remote_fs
+# Required-Stop:     $local_fs $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Example initscript
+# Description:       This file should be used to construct scripts to be
+#                    placed in /etc/init.d.
+### END INIT INFO
+
+# Author: Boris Erdmann <boris.erdmann@googlemail.com>
+#
+# Please remove the "Author" lines above and replace them
+# with your own name if you copy and modify this script.
+
+# Do NOT "set -e"
+
+# PATH should only include /usr/* if it runs after the mountnfs.sh script
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DESC="DROPR client spool service"
+NAME=droprd
+
+DAEMON=/usr/sbin/$NAME
+DAEMON=/home/erdmann/webs/pmq/client/bin/$NAME
+
+DAEMON_ARGS="--options args"
+PIDFILE=/var/run/$NAME.pid
+PIDFILE=/tmp/$NAME.pid
+
+SCRIPTNAME=/etc/init.d/$NAME
+
+
+case "$1" in
+    start)
+        if [ -e $PIDFILE ]
+        then
+            echo
+            echo "Error: $PIDFILE already exists."
+            echo "Cannot start $NAME more than once."
+            echo
+        else
+	    /sbin/start-stop-daemon --start --quiet --background \
+                --make-pidfile --pidfile $PIDFILE --exec $DAEMON
+        fi
+	;;
+    stop)
+        if [ -e $PIDFILE ]
+        then
+            /sbin/start-stop-daemon --stop --pidfile $PIDFILE
+            rm -f $PIDFILE
+
+        else
+            echo "Error: $PIDFILE not found. Could not stop $NAME."
+            echo
+            ps ux | egrep -e"$NAME|_queue" | grep -v grep
+        fi
+	;;
+  status)
+        ps ux | egrep -e"$NAME|_queue" | grep -v grep
+	;;
+  restart|force-reload)
+	;;
+    *)
+	#echo "Usage: $SCRIPTNAME {start|stop|restart|reload|force-reload}" >&2
+	echo "Usage: $SCRIPTNAME {start|stop}" >&2
+	exit 3
+	;;
+esac
+

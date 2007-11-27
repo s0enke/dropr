@@ -16,17 +16,17 @@ class ClientApiTest extends PHPUnit_Framework_TestCase
 	{
         require '../../client/classes/autoload.php';		
 
-        $this->storage = pmq_Client_Storage_Abstract::factory('filesystem', '/home/soenke/pmqclientqueue');
+        $this->storage = pmq_Client_Storage_Abstract::factory('filesystem', '/home/erdmann/pmq/clientqueue');
         $this->queue = new pmq_Client($this->storage);
 	}
 
 	public function testPut()
 	{
-		$peer = pmq_Client_Peer_Abstract::getInstance('HttpUpload', 'http://soenkepmqserver/server/server.php');
+		$peer = pmq_Client_Peer_Abstract::getInstance('HttpUpload', 'http://pmq.erdmann.test/tests/server/server.php');
 
     	$dt = time();
         $i=0;
-        $m = $this->createMessage(1000);
+        // $m = $this->createMessage(1000);
         
         $m = "ich bin eine test message von " . date("H:m:i");
         

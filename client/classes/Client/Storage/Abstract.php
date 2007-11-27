@@ -20,6 +20,9 @@ abstract class pmq_Client_Storage_Abstract
         return self::$instances[$dsn];
     }
 
+    public function getDsn() {
+        return $dsn;
+    }
     
 	/**
      * @return int	identifier of the message in queue

@@ -6,19 +6,42 @@ class pmq_Client
 	 * @var	pmq_Client_Storage
 	 */
     private $storage;
+    
+    private $ipcChannel;
 
 	public function __construct(pmq_Client_Storage_Abstract $storage)
 	{
-		$this->storage = $storage;
+	    $ipcPath       = DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'droprIpc' . DIRECTORY_SEPARATOR;
+	    $channelName   = $ipcPath . hash('sha1', $storage->getDsn());
+        $this->storage = $storage;
+
+        if (!is_dir($ipcPath)) {
+            mkdir($ipcPath, 0777, true);
+        }
+        if (!is_file($channelName)) {
+            posix_mknod($channelName, 0666);    
+        }
+        $this->ipcChannel = msg_get_queue(ftok($channelName,'*'));
 	}
 
-	public function putMessage(&$message)
+	public function getIpcChannel()
 	{
-
-		$messageId = $this->storage->saveMessage(&$message);
-		// notify queue via ipc ?!
-		return $messageId;
+	    return $this->ipcChannel;
 	}
+
+    public function putMessage(&$message)
+    {
+        $messageId = $this->storage->saveMessage(&$message);
+
+        // notify queue via ipc
+        $ipcStat = msg_stat_queue($this->ipcChannel);
+
+        if (is_array($ipcStat) && ($ipcStat['msg_qnum'] < 5)) {
+
+            msg_send($this->ipcChannel, 1, '*', false, false, $ipcError);
+        }
+        return $messageId;
+    }
 
 	public function createMessage(
 	    &$message = NULL,

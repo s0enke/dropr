@@ -1,0 +1,22 @@
+#!/bin/bash
+
+RUN=/home/erdmann/webs/pmq/client/bin/client_queue.php
+SPOOLDIR=/home/erdmann/pmq/clientqueue/
+STORAGE=filesystem 
+
+PHP=/usr/bin/php
+
+clean_up()
+{
+    kill -SIGUSR1 $SLAVE
+    exit
+}
+
+trap clean_up SIGHUP SIGINT SIGTERM
+
+while [ 1 ]
+do
+    $PHP $RUN $STORAGE $SPOOLDIR &
+    SLAVE=$!
+    wait $SLAVE
+done

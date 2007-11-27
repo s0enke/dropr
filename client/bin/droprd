@@ -1,10 +1,12 @@
 #!/bin/bash
 
-RUN=/home/erdmann/webs/pmq/client/bin/client_queue.php
-SPOOLDIR=/home/erdmann/pmq/clientqueue/
-STORAGE=filesystem 
-
+RUN=/var/www/bin/client_queue.php
+SPOOLDIR=/var/www/spool/pmq/clientspool/
+STORAGE=filesystem
 PHP=/usr/bin/php
+
+[ -e ./dropr.cfg ] && . ./dropr.cfg
+[ -e /etc/defaults/dropr ] && . /etc/defaults/dropr
 
 clean_up()
 {

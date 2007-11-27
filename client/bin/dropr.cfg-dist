@@ -1,4 +1,4 @@
 RUN=$CWD/client_queue.php
 DAEMON=$CWD/$NAME
-SPOOLDIR=$CWD/../../../../pmq/clientqueue/
+SPOOLDIR=$CWD/../../../../pmqspooler/client/
 PIDFILE=$CWD/$NAME.pid

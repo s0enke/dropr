@@ -92,7 +92,7 @@ class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract
             
             $filePath = $spoolDir . DIRECTORY_SEPARATOR . $fName; 
 
-            $message = new pmq_Server_Message($client, $messageId, new SplFileInfo($filePath), $priority, filectime($filePath), $this);
+            $message = new pmq_Server_Message($client, $messageId, new SplFileInfo($filePath), $channel, $priority, filectime($filePath), $this);
 
             $messages[] = $message;
         }

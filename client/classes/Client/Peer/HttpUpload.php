@@ -23,8 +23,6 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
         // XXX: geloet
         $uploadFields['client'] = trim(`hostname`);
         
-        $time = time();
-        
         $metaData = array();
         foreach ($messages as $k => $message) {
             /* @var $message pmq_Client_Message */
@@ -55,8 +53,6 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
         }
         
         $uploadFields['metaData'] = serialize($metaData);
-        
-        echo (time()  - $time) . "\n";
         
         // ACHTUNG: extremes Geloet!!!
 

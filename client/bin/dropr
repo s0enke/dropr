@@ -20,18 +20,19 @@
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="DROPR client spool service"
+
 NAME=droprd
+CONFIG="`pwd`/dropr.cfg"
 
 DAEMON=/usr/sbin/$NAME
-DAEMON=/home/erdmann/webs/pmq/client/bin/$NAME
+DAEMON_ARGS="$CONFIG"
 
-DAEMON_ARGS="--options args"
 PIDFILE=/var/run/$NAME.pid
-PIDFILE=/tmp/$NAME.pid
 
 SCRIPTNAME=/etc/init.d/$NAME
 
-[ -e ./dropr.cfg ] && . ./dropr.cfg
+CWD=`dirname "$CONFIG"`
+[ -e "$CONFIG" ] && . "$CONFIG"
 [ -e /etc/defaults/dropr ] && . /etc/defaults/dropr
 
 case "$1" in
@@ -44,8 +45,8 @@ case "$1" in
             echo
         else
             /sbin/start-stop-daemon --start --quiet --background \
-                --chuid www-data:www-data \
-                --make-pidfile --pidfile $PIDFILE --exec $DAEMON
+                --chuid www-data:www-data --make-pidfile \
+                --pidfile $PIDFILE --exec $DAEMON -- "$DAEMON_ARGS"
         fi
 	;;
     stop)

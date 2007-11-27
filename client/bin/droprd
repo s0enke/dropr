@@ -1,11 +1,14 @@
 #!/bin/bash
 
+CONFIG="$1"
+
 RUN=/var/www/bin/client_queue.php
 SPOOLDIR=/var/www/spool/pmq/clientspool/
 STORAGE=filesystem
 PHP=/usr/bin/php
 
-[ -e ./dropr.cfg ] && . ./dropr.cfg
+CWD=`dirname "$CONFIG"`
+[ -e "$CONFIG" ] && . "$CONFIG"
 [ -e /etc/defaults/dropr ] && . /etc/defaults/dropr
 
 clean_up()

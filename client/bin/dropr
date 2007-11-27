@@ -56,7 +56,9 @@ case "$1" in
             rm -f $PIDFILE
 
         else
-            echo "Error: $PIDFILE not found. Could not stop $NAME."
+            echo
+            echo "Error: $PIDFILE not found."
+            echo "Could not stop $NAME."
             echo
             ps aux | egrep -e"$NAME|_queue" | grep -v grep
         fi

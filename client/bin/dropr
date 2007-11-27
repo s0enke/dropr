@@ -31,6 +31,8 @@ PIDFILE=/tmp/$NAME.pid
 
 SCRIPTNAME=/etc/init.d/$NAME
 
+[ -e ./dropr.cfg ] && . ./dropr.cfg
+[ -e /etc/defaults/dropr ] && . /etc/defaults/dropr
 
 case "$1" in
     start)

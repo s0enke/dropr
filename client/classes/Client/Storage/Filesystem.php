@@ -63,7 +63,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         fclose($fh);
 
         if (!rename($inPath . $fName, $spoolPath . $fName)) {
-            throw new pmq_Client_Exception("Could not move spoolfile!");
+            throw new pmq_Client_Exception("Could not move spoolfile " . $fName . "!");
         }
         return $fName;
     }

@@ -1,5 +1,7 @@
 #!/usr/bin/php
 <?php
+ini_set('display_errors', false);
+
 require realpath(dirname(__FILE__) . '/..') . '/classes/autoload.php';
 /*
  * Config

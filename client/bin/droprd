@@ -9,7 +9,7 @@ PHP=/usr/bin/php
 
 CWD=`dirname "$CONFIG"`
 [ -e "$CONFIG" ] && . "$CONFIG"
-[ -e /etc/defaults/dropr ] && . /etc/defaults/dropr
+[ -e /etc/default/dropr ] && . /etc/default/dropr
 
 clean_up()
 {

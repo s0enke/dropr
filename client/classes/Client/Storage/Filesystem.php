@@ -26,7 +26,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 	    
 	    if (!is_dir($path)) {
 	        if (!@mkdir($path, 0755)) {
-	            throw new Pmq_Client_Exception("Could not create Queue Directory $path");
+	            throw new pmq_Client_Exception("Could not create Queue Directory $path");
 	        }
 	    }
 	    

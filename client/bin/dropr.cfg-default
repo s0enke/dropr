@@ -1,0 +1,6 @@
+SPOOLDIR=/var/www/cms/pmqspooler/client/
+PIDFILE=/var/run/$NAME.pid
+
+BIN=/var/www/cms/common/pmq/client/bin
+RUN=$BIN/client_queue.php
+DAEMON=$BIN/$NAME

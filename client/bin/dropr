@@ -33,7 +33,7 @@ SCRIPTNAME=/etc/init.d/$NAME
 
 CWD=`dirname "$CONFIG"`
 [ -e "$CONFIG" ] && . "$CONFIG"
-[ -e /etc/defaults/dropr ] && . /etc/defaults/dropr
+[ -e /etc/default/dropr ] && . /etc/default/dropr
 
 case "$1" in
     start)

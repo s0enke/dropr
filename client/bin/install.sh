@@ -21,6 +21,14 @@ then
       echo
     ;;
     *)
+
+      mkdir -p $SPOOLDIR/in
+      mkdir -p $SPOOLDIR/proc
+      mkdir -p $SPOOLDIR/sent
+
+      chmod -R ug+rwx $SPOOLDIR
+      chown -R www-data:www-data $SPOOLDIR
+
       ln -s $INITSCRIPT /etc/init.d/dropr
       ln -s $CONFIG /etc/default/dropr
 

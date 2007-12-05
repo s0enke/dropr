@@ -62,5 +62,9 @@ class pmq_Client
 	        $sync
         );
 	}
-	
+
+	public function getStorage()
+	{
+	    return $this->storage;
+	}
 }

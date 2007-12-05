@@ -37,7 +37,8 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 	    $this->path = realpath($path);
 	}
 
-    public function saveMessage(pmq_Client_Message $message) {
+    public function saveMessage(pmq_Client_Message $message)
+    {
         $inPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_IN) . DIRECTORY_SEPARATOR;
         $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
 
@@ -141,11 +142,13 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         return substr($tName, $spPos+1).'-'.substr($tName, 2, $spPos-2);
     }
     
-    public function getType() {
+    public function getType()
+    {
         return self::TYPE_FILE;
     }
     
-    public function checkSentMessages(array &$messages, array &$result) {
+    public function checkSentMessages(array &$messages, array &$result)
+    {
         $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
         $sentPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SENT) . DIRECTORY_SEPARATOR;
 
@@ -163,5 +166,32 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         }
         
     }
-    
+
+    public function countQueuedMessages()
+    {
+        $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
+        return count(scandir($spoolPath))-2;
+    }
+
+    public function countSentMessages()
+    {
+        $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SENT) . DIRECTORY_SEPARATOR;
+        return count(scandir($spoolPath))-2;
+    }
+
+    public function wipeSentMessages($olderThanMinutes)
+    {
+        $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SENT) . DIRECTORY_SEPARATOR;
+        $dirIter = new DirectoryIterator($spoolPath);
+        $time = time()-($olderThanMinutes*60);
+        $c = 0;
+        foreach ($dirIter as $fInfo) {
+            if (($fInfo->getATime() < $time) && $fInfo->isFile()) {
+
+                unlink($spoolPath . $fInfo->getFilename());
+                $c++;
+            }
+        }
+        return $c;
+    }
 }

@@ -44,5 +44,11 @@ abstract class pmq_Client_Storage_Abstract
     
     abstract public function getType();
 
-    abstract public function checkSentMessages(array &$messages, array &$result); 
+    abstract public function checkSentMessages(array &$messages, array &$result);
+
+    abstract public function countQueuedMessages();
+
+    abstract public function countSentMessages();
+
+    abstract public function wipeSentMessages($olderThanMinutes);
 }

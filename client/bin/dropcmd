@@ -1,0 +1,45 @@
+#!/bin/sh
+
+COMMAND="$1"
+PARAM="$2"
+
+STORAGE=filesystem
+SPOOLDIR=/home/erdmann/pmq/clientqueue/
+
+CONFIG=/etc/default/dropr
+if [ -e "$CONFIG" ]
+then
+  CWD=`pwd`
+  . $CONFIG
+else
+  echo
+  echo "$CONFIG missing. Exiting..."
+  echo
+
+  exit
+fi
+
+
+CODE='
+
+require realpath(dirname(__FILE__) . "/..") . "/classes/autoload.php";
+$storage    = pmq_Client_Storage_Abstract::factory($argv[1], $argv[2]);
+
+
+switch ($argv[3]) {
+    case "count_queue":
+        echo $storage->countQueuedMessages() . "\n";
+    break;
+    case "count_sent":
+        echo $storage->countSentMessages() . "\n";
+    break;
+    case "wipe_sent":
+        $min = (int) $argv[4];
+        if ($min > 0) {
+            echo $storage->wipeSentMessages($min) . "\n";
+        }
+    break;
+}
+'
+
+/usr/bin/php -r "$CODE" -- "$STORAGE" "$SPOOLDIR" "$COMMAND" "$PARAM"

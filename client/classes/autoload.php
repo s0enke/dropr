@@ -16,7 +16,7 @@ function dropr_Server_Autoload($className)
        return; 
     } 
     
-    $file = substr(str_replace('_', '/', $className), 4) . '.php';
+    $file = substr(str_replace('_', '/', $className), 6) . '.php';
     require realpath(dirname(__FILE__)) . '/' . $file;
 }
 

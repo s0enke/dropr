@@ -10,9 +10,9 @@
  */
 set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__)));
 
-function pmq_Server_Autoload($className)
+function dropr_Server_Autoload($className)
 {
-    if (strpos($className, 'pmq_') !== 0) { 
+    if (strpos($className, 'dropr_') !== 0) { 
        return; 
     } 
     
@@ -20,4 +20,4 @@ function pmq_Server_Autoload($className)
     require realpath(dirname(__FILE__)) . '/' . $file;
 }
 
-spl_autoload_register('pmq_Server_Autoload');
+spl_autoload_register('dropr_Server_Autoload');

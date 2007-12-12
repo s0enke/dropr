@@ -1,10 +1,10 @@
 <?php
 require '../../client/classes/autoload.php';		
 
-$storage = pmq_Client_Storage_Abstract::factory('filesystem', '/home/soenke/pmqclientqueue');
-$queue = new pmq_Client($storage);
+$storage = dropr_Client_Storage_Abstract::factory('filesystem', '/home/soenke/droprclientqueue');
+$queue = new dropr_Client($storage);
 
-$peer = pmq_Client_Peer_Abstract::getInstance('HttpUpload', 'http://soenkepmqserver/server/server.php');
+$peer = dropr_Client_Peer_Abstract::getInstance('HttpUpload', 'http://soenkedroprserver/server/server.php');
 
 $dt = time();
 $i=0;

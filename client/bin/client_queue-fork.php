@@ -12,7 +12,7 @@ $time = time();
 /*
  * Config
  */
-$storage = pmq_Client_Storage_Abstract::factory($argv[1], $argv[2]);
+$storage = dropr_Client_Storage_Abstract::factory($argv[1], $argv[2]);
 
 // huh? does it work?
 posix_setsid();
@@ -45,7 +45,7 @@ if ($pid == -1) {
 
 }
 
-function sendMessages(pmq_Client_Storage_Abstract $storage)
+function sendMessages(dropr_Client_Storage_Abstract $storage)
 {
     
     #echo getmypid() . "\n";
@@ -61,7 +61,7 @@ function sendMessages(pmq_Client_Storage_Abstract $storage)
     
             #echo "Messages: " . count($peerMessages) . "\n";
         
-            $peer = pmq_Client_Peer_Abstract::getInstance($peerKey);
+            $peer = dropr_Client_Peer_Abstract::getInstance($peerKey);
             $result = $peer->send($peerMessages, $storage);
     
             #echo "have sent queue: " . (time() - $time) . "\n";
@@ -74,7 +74,7 @@ function sendMessages(pmq_Client_Storage_Abstract $storage)
     
 }
 
-function pollMessages(pmq_Client_Storage_Abstract $storage)
+function pollMessages(dropr_Client_Storage_Abstract $storage)
 {
     
     while (true) {
@@ -92,7 +92,7 @@ function pollMessages(pmq_Client_Storage_Abstract $storage)
     
             echo "Messages: " . count($peerMessages) . "\n";
         
-            $peer = pmq_Client_Peer_Abstract::getInstance($peerKey);
+            $peer = dropr_Client_Peer_Abstract::getInstance($peerKey);
             $result = $peer->send($peerMessages, $storage);
     
             echo "have sent queue: " . (time() - $time) . "\n";

@@ -1,5 +1,5 @@
 <?php
-abstract class pmq_Client_Peer_Abstract
+abstract class dropr_Client_Peer_Abstract
 {
     private static $instances = array();
 
@@ -11,14 +11,14 @@ abstract class pmq_Client_Peer_Abstract
     {
         if ($url === false) {
             if (!list($method, $url) = explode(';', $method)) {
-                throw new pmq_Client_Exception("Could not explode method and url from '$method'");
+                throw new dropr_Client_Exception("Could not explode method and url from '$method'");
             }
         }
 
         $key = $method . ';' . $url;
         if (!isset(self::$instances[$key])) {
             // Guess the classname from transport method
-            $className = 'pmq_Client_Peer_' . ucfirst($method);
+            $className = 'dropr_Client_Peer_' . ucfirst($method);
             self::$instances[$key] = new $className($method, $url);
         }
 
@@ -57,8 +57,8 @@ abstract class pmq_Client_Peer_Abstract
      * sends a message directly and give feedback immediately
      * 
      * @return string	the answer
-     * @throws	pmq_Client_Exception	If something went wrong 
+     * @throws	dropr_Client_Exception	If something went wrong 
      */
-    abstract public function sendDirectly(pmq_Client_Message $message);
+    abstract public function sendDirectly(dropr_Client_Message $message);
     
 }

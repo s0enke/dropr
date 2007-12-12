@@ -1,5 +1,5 @@
 <?php
-class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract 
+class dropr_Server_Storage_Filesystem extends dropr_Server_Storage_Abstract 
 {
     
     const SPOOLDIR_TYPE_SPOOL = 'proc';
@@ -14,23 +14,23 @@ class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract
 	    // XXX: Code duplication with client
 	    
 	    if (!is_string($path)) {
-	        throw new pmq_Server_Exception("No valid path given");
+	        throw new dropr_Server_Exception("No valid path given");
 	    }
 	    
 	    if (!is_dir($path)) {
 	        if (!@mkdir($path, 0755)) {
-	            throw new Pmq_Server_Exception("Could not create Queue Directory $path");
+	            throw new Dropr_Server_Exception("Could not create Queue Directory $path");
 	        }
 	    }
 	    
 	    if (!is_writeable($path)) {
-	        throw new pmq_Server_Exception("$path is not writeable!");
+	        throw new dropr_Server_Exception("$path is not writeable!");
 	    }
 	    
 	    $this->path = realpath($path);
 	}
 
-    public function put(pmq_Server_Message $message)
+    public function put(dropr_Server_Message $message)
     {
         $mHandle = $message->getMessage();
         if ($mHandle instanceof SplFileInfo) {
@@ -47,10 +47,10 @@ class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract
                 return;
             }
             if (!rename($src, $proc)) {
-                throw new pmq_Server_Exception("Could not save $src to $proc");
+                throw new dropr_Server_Exception("Could not save $src to $proc");
             }
         } else {
-            throw new pmq_Server_Exception('not implemented');
+            throw new dropr_Server_Exception('not implemented');
         }
     }
 
@@ -60,7 +60,7 @@ class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract
         
         if (!is_dir($path)) {
             if (!mkdir($path, 0775, true)) {
-                throw new pmq_Server_Exception("Could not create directory $path!");
+                throw new dropr_Server_Exception("Could not create directory $path!");
             }
         }
         
@@ -92,7 +92,7 @@ class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract
             
             $filePath = $spoolDir . DIRECTORY_SEPARATOR . $fName; 
 
-            $message = new pmq_Server_Message($client, $messageId, new SplFileInfo($filePath), $channel, $priority, filectime($filePath), $this);
+            $message = new dropr_Server_Message($client, $messageId, new SplFileInfo($filePath), $channel, $priority, filectime($filePath), $this);
 
             $messages[] = $message;
         }
@@ -100,7 +100,7 @@ class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract
         return $messages;
     }
     
-    public function setProcessed(pmq_Server_Message $message)
+    public function setProcessed(dropr_Server_Message $message)
     {
         return rename($this->buildMessagePath($message, self::SPOOLDIR_TYPE_SPOOL), $this->buildMessagePath($message, self::SPOOLDIR_TYPE_PROCESSED));
     }
@@ -114,7 +114,7 @@ class pmq_Server_Storage_Filesystem extends pmq_Server_Storage_Abstract
     /**
      * Build the spoolpath for a message
      */
-    private function buildMessagePath(pmq_Server_Message $message, $type)
+    private function buildMessagePath(dropr_Server_Message $message, $type)
     {
         /// XXX encode base64 ?
         // build the path spoolpath/pri_client_msgid

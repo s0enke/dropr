@@ -1,6 +1,6 @@
 SPOOLDIR=/var/spool/dropr/client/
 PIDFILE=/var/run/$NAME.pid
 
-BIN=/var/www/common/pmq/client/bin
+BIN=/var/www/common/dropr/client/bin
 RUN=$BIN/client_queue.php
 DAEMON=$BIN/$NAME

@@ -1,5 +1,5 @@
 <?php
-class pmq_Server_Transport_HttpUpload extends pmq_Server_Transport_Abstract 
+class dropr_Server_Transport_HttpUpload extends dropr_Server_Transport_Abstract 
 {
     
     public function handle()
@@ -33,7 +33,7 @@ class pmq_Server_Transport_HttpUpload extends pmq_Server_Transport_Abstract
             try {
 
                 if (!isset($_FILES[$messageRef])) {
-                    throw new pmq_Server_Exception("message not in fileupload!");
+                    throw new dropr_Server_Exception("message not in fileupload!");
                 }
                 
                 if (!is_uploaded_file($_FILES[$messageRef]['tmp_name'])) {
@@ -43,7 +43,7 @@ class pmq_Server_Transport_HttpUpload extends pmq_Server_Transport_Abstract
                 }
                 
                 $file = new SplFileInfo($_FILES[$messageRef]['tmp_name']);
-                $message = new pmq_Server_Message($client, $messageId, $file, $channel, $priority);
+                $message = new dropr_Server_Message($client, $messageId, $file, $channel, $priority);
                 
                 $this->getStorage()->put($message);
                 

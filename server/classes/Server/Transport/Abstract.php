@@ -1,5 +1,5 @@
 <?php
-abstract class pmq_Server_Transport_Abstract
+abstract class dropr_Server_Transport_Abstract
 {
     
     /**
@@ -18,7 +18,7 @@ abstract class pmq_Server_Transport_Abstract
     const CALL_POLL = 3;
     
 	/**
-     * @var pmq_Server_Storage
+     * @var dropr_Server_Storage
      */
     private $storage;
     
@@ -26,15 +26,15 @@ abstract class pmq_Server_Transport_Abstract
     private $directInvocationHandlers = array();
 
     /**
-     * @return pmq_Server_Transport_Abstract
+     * @return dropr_Server_Transport_Abstract
      */
-    public static function factory($type, pmq_Server_Storage_Abstract $storage)
+    public static function factory($type, dropr_Server_Storage_Abstract $storage)
     {
-        $className = 'pmq_Server_Transport_' . ucfirst($type);
+        $className = 'dropr_Server_Transport_' . ucfirst($type);
         return new $className($storage);
     }
     
-    public function addDirectInvocationHandler(pmq_Server_DirectInvocation $handler, $type = null)
+    public function addDirectInvocationHandler(dropr_Server_DirectInvocation $handler, $type = null)
     {
         $this->directInvocationHandlers[$type] = $handler;
     }
@@ -43,23 +43,23 @@ abstract class pmq_Server_Transport_Abstract
      * this function is called by the transport layer if a direct message
      * has to be processed.
      * 
-     * @throws pmq_Server_Exception
+     * @throws dropr_Server_Exception
      */
-    protected function invoke(pmq_Server_Message $message, $type)
+    protected function invoke(dropr_Server_Message $message, $type)
     {
         // check if a handler for this type of message is registered
         if (!isset($this->directInvocationHandlers[$type])) {
-            throw new pmq_Server_Exception("No handler set for type '$type'");
+            throw new dropr_Server_Exception("No handler set for type '$type'");
         }
         
-        /* @var $this->directInvocationHandlers[$type] pmq_Server_DirectInvocation */
+        /* @var $this->directInvocationHandlers[$type] dropr_Server_DirectInvocation */
         
         return $this->directInvocationHandlers[$type]->invokeMessage($message);
     }
     
     
     
-    protected function __construct(pmq_Server_Storage_Abstract $storage)
+    protected function __construct(dropr_Server_Storage_Abstract $storage)
     {
         $this->storage = $storage;
     }
@@ -67,7 +67,7 @@ abstract class pmq_Server_Transport_Abstract
 
     
 	/**
-     * @return pmq_Server_Storage_Abstract
+     * @return dropr_Server_Storage_Abstract
      */
     protected function getStorage()
     {

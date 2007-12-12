@@ -10,8 +10,8 @@ if (!isset($argv[2])) {
     echo "usage: $argv[0] <storage-type> <storage-dsn>\n";
     exit;
 }
-$storage    = pmq_Client_Storage_Abstract::factory($argv[1], $argv[2]);
-$qInstance  = new pmq_Client($storage);
+$storage    = dropr_Client_Storage_Abstract::factory($argv[1], $argv[2]);
+$qInstance  = new dropr_Client($storage);
 $ipcChannel = $qInstance->getIpcChannel();
 
 
@@ -40,7 +40,7 @@ while ($continue && ($msgCount < 1000)) {
 
         foreach ($queuedMessages as $peerKey => $peerMessages) {
     
-            $peer = pmq_Client_Peer_Abstract::getInstance($peerKey);
+            $peer = dropr_Client_Peer_Abstract::getInstance($peerKey);
             $result = $peer->send($peerMessages, $storage);
             $storage->checkSentMessages($peerMessages, $result);
         }

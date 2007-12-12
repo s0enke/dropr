@@ -3,12 +3,12 @@ class ClientApiTest extends PHPUnit_Framework_TestCase
 {
 	
 	/**
-	 * @var pmq_Client
+	 * @var dropr_Client
 	 */
     private $queue;
     
     /**
-     * @var pmq_Client_Storage_Abstract
+     * @var dropr_Client_Storage_Abstract
      */
     private $storage;
 
@@ -16,13 +16,13 @@ class ClientApiTest extends PHPUnit_Framework_TestCase
 	{
         require '../../client/classes/autoload.php';		
 
-        $this->storage = pmq_Client_Storage_Abstract::factory('filesystem', '/home/erdmann/pmq/clientqueue');
-        $this->queue = new pmq_Client($this->storage);
+        $this->storage = dropr_Client_Storage_Abstract::factory('filesystem', '/home/erdmann/dopr/clientqueue');
+        $this->queue = new dropr_Client($this->storage);
 	}
 
 	public function testPut()
 	{
-		$peer = pmq_Client_Peer_Abstract::getInstance('HttpUpload', 'http://pmq.erdmann.test/tests/server/server.php');
+		$peer = dropr_Client_Peer_Abstract::getInstance('HttpUpload', 'http://dropr.erdmann.test/tests/server/server.php');
 
     	$dt = time();
         $i=0;

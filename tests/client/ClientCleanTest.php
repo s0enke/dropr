@@ -3,12 +3,12 @@ class ClientCleanTest extends PHPUnit_Framework_TestCase
 {
 	
 	/**
-	 * @var pmq_Client
+	 * @var dropr_Client
 	 */
     private $queue;
     
     /**
-     * @var pmq_Client_Storage_Abstract
+     * @var dropr_Client_Storage_Abstract
      */
     private $storage;
 
@@ -16,8 +16,8 @@ class ClientCleanTest extends PHPUnit_Framework_TestCase
 	{
         require '../../client/classes/autoload.php';		
 
-        $this->storage = pmq_Client_Storage_Abstract::factory('filesystem', '/home/erdmann/pmq/clientqueue');
-        $this->queue = new pmq_Client($this->storage);
+        $this->storage = dropr_Client_Storage_Abstract::factory('filesystem', '/home/erdmann/dropr/clientqueue');
+        $this->queue = new dropr_Client($this->storage);
 	}
 
 	public function testPut()

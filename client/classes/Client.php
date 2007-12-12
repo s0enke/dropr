@@ -1,15 +1,15 @@
 <?php
-class pmq_Client
+class dropr_Client
 {
 
 	/**
-	 * @var	pmq_Client_Storage
+	 * @var	dropr_Client_Storage
 	 */
     private $storage;
     
     private $ipcChannel;
 
-	public function __construct(pmq_Client_Storage_Abstract $storage)
+	public function __construct(dropr_Client_Storage_Abstract $storage)
 	{
 	    $ipcPath       = DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'droprIpc' . DIRECTORY_SEPARATOR;
 	    $channelName   = $ipcPath . hash('sha1', realpath($storage->getDsn()));
@@ -44,7 +44,7 @@ class pmq_Client
     }
 
 	/**
-	 * @return pmq_Client_Message
+	 * @return dropr_Client_Message
 	 */
     public function createMessage(
 	    &$message = NULL,
@@ -53,7 +53,7 @@ class pmq_Client
 	    $priority = 9,
 	    $sync = NULL)
 	{
-	    return new pmq_Client_Message(
+	    return new dropr_Client_Message(
 	        $this,
 	        $message,
 	        $peer,

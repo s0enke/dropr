@@ -6,7 +6,7 @@
  * @author Ingo Schramm <coding@ister.org>
  * @version $Id$
  */
-abstract class Pmq_TransportFormat_Abstract
+abstract class Dropr_TransportFormat_Abstract
 {
    
     /**

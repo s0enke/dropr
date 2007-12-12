@@ -1,5 +1,5 @@
 <?php
-class pmq_Server_Message
+class dropr_Server_Message
 {
     private $storage;
     
@@ -23,7 +23,7 @@ class pmq_Server_Message
 
     private $sync;
     
-    public function __construct($client, $messageId, &$message, $channel = 'common', $priority = 9, $time = null, pmq_Server_Storage_Abstract $storage = null)
+    public function __construct($client, $messageId, &$message, $channel = 'common', $priority = 9, $time = null, dropr_Server_Storage_Abstract $storage = null)
     {
         $this->client = $client;
         $this->messageId = $messageId;
@@ -62,7 +62,7 @@ class pmq_Server_Message
     public function __toString()
     {
         if (!$this->storage) {
-            throw new pmq_Server_Exception("cannot output state if no storage is given!");
+            throw new dropr_Server_Exception("cannot output state if no storage is given!");
         }
         
         if ($this->message instanceof SplFileInfo) {

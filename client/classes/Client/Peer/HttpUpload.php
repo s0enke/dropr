@@ -1,5 +1,5 @@
 <?php
-class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
+class dropr_Client_Peer_HttpUpload extends dropr_Client_Peer_Abstract
 {
     const TYPE_QUEUE = 1;
     
@@ -25,7 +25,7 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
         
         $metaData = array();
         foreach ($messages as $k => $message) {
-            /* @var $message pmq_Client_Message */
+            /* @var $message dropr_Client_Message */
             
             $metaData[$k] = array(
                 'message'       => 'f_' . $k,
@@ -41,14 +41,14 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
                 $uploadFields['f_' . $k] = '@' . $content->getPathname();
             } elseif (is_string($content)) {
                 // message content is a string, we've to build a tempfile first
-                if (!$filename = tempnam('/tmp', 'pmq')) {
+                if (!$filename = tempnam('/tmp', 'dropr')) {
                     throw new Exception();
                 }
                 if (!file_put_contents($filename, $content)) {
                     throw new Exception();
                 }
             } else {
-                throw new pmq_Client_Exception("Currently only file transport is implemented.");
+                throw new dropr_Client_Exception("Currently only file transport is implemented.");
             }
         }
         
@@ -90,7 +90,7 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
         }
         
         if ($mrc != CURLM_OK) {
-            throw new pmq_Client_Exception("Curl multi read error $mrc");
+            throw new dropr_Client_Exception("Curl multi read error $mrc");
         }
         
         // retrieve data
@@ -98,7 +98,7 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
             if (($err = curl_error($conn[$i])) == '') {
                 $res[$i]=curl_multi_getcontent($conn[$i]);
             } else {
-                throw new pmq_Client_Exception("Curl error on handle $i: $err");
+                throw new dropr_Client_Exception("Curl error on handle $i: $err");
             }
             curl_multi_remove_handle($mh,$conn[$i]);
             curl_close($conn[$i]);
@@ -109,7 +109,7 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
         
         if (!$return = unserialize($res[0])) {
             // XXX NO exception but return false and LOG!!
-            throw new pmq_Client_Exception("Could not unserialize the result!");;
+            throw new dropr_Client_Exception("Could not unserialize the result!");;
         }
         
         return $return;
@@ -120,7 +120,7 @@ class pmq_Client_Peer_HttpUpload extends pmq_Client_Peer_Abstract
         
     }
     
-    public function sendDirectly(pmq_Client_Message $message)
+    public function sendDirectly(dropr_Client_Message $message)
     {
         return $this->httpFileUpload($messages, self::TYPE_DIRECT);
     }

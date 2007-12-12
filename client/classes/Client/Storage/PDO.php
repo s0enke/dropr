@@ -1,7 +1,7 @@
 <?php
 require_once 'Storage.php';
 
-class pmq_Client_Storage_PDO implements pmq_Client_Storage {
+class dropr_Client_Storage_PDO implements dropr_Client_Storage {
 	
 	/**
 	 * @var PDO

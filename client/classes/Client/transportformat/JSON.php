@@ -12,7 +12,7 @@
  * @author Ingo Schramm <coding@ister.org>
  * @version $Id$
  */
-class Pmq_Client_TransportFormat_JSON extends Pmq_Client_TransportFormat_Abstract
+class Dropr_Client_TransportFormat_JSON extends Dropr_Client_TransportFormat_Abstract
 {
 
     /** 
@@ -57,7 +57,7 @@ class Pmq_Client_TransportFormat_JSON extends Pmq_Client_TransportFormat_Abstrac
     public function encode($item) 
     {
         if (is_resource($item)) {
-            throw new Pmq_Client_Exception('cannot encode resources');
+            throw new Dropr_Client_Exception('cannot encode resources');
         }
         $type   = ($item === null) ? 'null' : gettype($item);
         $item   = array('type' => $type, 'item' => $item);
@@ -78,11 +78,11 @@ class Pmq_Client_TransportFormat_JSON extends Pmq_Client_TransportFormat_Abstrac
     {
         $result = json_decode($item, true);
         if (!(is_array($result) && isset($result['type']))) {
-            throw new Pmq_Client_Exception('broken JSON string or no type specified: ' . $item . '('.gettype($result).')');
+            throw new Dropr_Client_Exception('broken JSON string or no type specified: ' . $item . '('.gettype($result).')');
         }
         $item = $result['item'];
         if (!settype($item, $result['type']))
-            throw new Pmq_Client_Exception('invalid type: ' . $result['type']);
+            throw new Dropr_Client_Exception('invalid type: ' . $result['type']);
         return $item;
     }
     

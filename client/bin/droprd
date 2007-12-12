@@ -3,7 +3,7 @@
 CONFIG="$1"
 
 RUN=/var/www/bin/client_queue.php
-SPOOLDIR=/var/www/spool/pmq/clientspool/
+SPOOLDIR=/var/www/spool/dropr/clientspool/
 STORAGE=filesystem
 PHP=/usr/bin/php
 

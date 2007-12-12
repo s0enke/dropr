@@ -1,14 +1,14 @@
 <?php
-class pmq_Client_Message
+class dropr_Client_Message
 {
     /**
-	 * @var pmq_Client
+	 * @var dropr_Client
 	 */
     private $queue;
     private $message;    
 
     /**
-	 * @var pmq_Client_Peer
+	 * @var dropr_Client_Peer
 	 */
     private $peer;
 
@@ -20,9 +20,9 @@ class pmq_Client_Message
     private $state = NULL;
 
     public function __construct(
-        pmq_Client $queue = NULL,
+        dropr_Client $queue = NULL,
         &$message = NULL,
-        pmq_Client_Peer_Abstract $peer = NULL,
+        dropr_Client_Peer_Abstract $peer = NULL,
         $channel = 'common',
         $priority = 9,
         $sync = NULL)
@@ -41,7 +41,7 @@ class pmq_Client_Message
     }
 
     /**
-	 * @return pmq_Client_Peer_Abstract
+	 * @return dropr_Client_Peer_Abstract
 	 */
     
     public function getPeer()

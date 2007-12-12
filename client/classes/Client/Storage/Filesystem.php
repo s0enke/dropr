@@ -6,7 +6,7 @@
  * @author Boris Erdmann
  *
  */
-class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
+class dropr_Client_Storage_Filesystem extends dropr_Client_Storage_Abstract
 {
 
     const SPOOLDIR_TYPE_IN = 'in';
@@ -21,23 +21,23 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 	{
 	    
 	    if (!is_string($path)) {
-	        throw new pmq_Client_Exception("No valid path given");
+	        throw new dropr_Client_Exception("No valid path given");
 	    }
 	    
 	    if (!is_dir($path)) {
 	        if (!@mkdir($path, 0755)) {
-	            throw new pmq_Client_Exception("Could not create Queue Directory $path");
+	            throw new dropr_Client_Exception("Could not create Queue Directory $path");
 	        }
 	    }
 	    
 	    if (!is_writeable($path)) {
-	        throw new pmq_Client_Exception("$path is not writeable!");
+	        throw new dropr_Client_Exception("$path is not writeable!");
 	    }
 	    
 	    $this->path = realpath($path);
 	}
 
-    public function saveMessage(pmq_Client_Message $message)
+    public function saveMessage(dropr_Client_Message $message)
     {
         $inPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_IN) . DIRECTORY_SEPARATOR;
         $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
@@ -64,7 +64,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         fclose($fh);
 
         if (!rename($inPath . $fName, $spoolPath . $fName)) {
-            throw new pmq_Client_Exception("Could not move spoolfile " . $fName . "!");
+            throw new dropr_Client_Exception("Could not move spoolfile " . $fName . "!");
         }
         return $fName;
     }
@@ -89,10 +89,10 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
             $decodedPeerKey = $this->decodeFromFs($encodedPeerKey);
             $decodedChannel = $this->decodeFromFs($encodedChannel);
 
-            $message = new pmq_Client_Message(
+            $message = new dropr_Client_Message(
                 NULL,
                 new SplFileInfo($spoolDir . $fName),
-                pmq_Client_Peer_Abstract::getInstance($decodedPeerKey),
+                dropr_Client_Peer_Abstract::getInstance($decodedPeerKey),
                 $decodedChannel,
                 $priority
             );
@@ -107,7 +107,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
     /**
      * 
      */
-    public function getMessage($messageId, pmq_Client_Peer $peer)
+    public function getMessage($messageId, dropr_Client_Peer $peer)
     {
         return $this->getPeerSpoolPath($peer, self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR . $messageId;
     }
@@ -128,7 +128,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
         
         if (!is_dir($path)) {
             if (!mkdir($path, 0775)) {
-                throw new pmq_Client_Exception("Could not create directory $path!");
+                throw new dropr_Client_Exception("Could not create directory $path!");
             }
         }
 
@@ -158,7 +158,7 @@ class pmq_Client_Storage_Filesystem extends pmq_Client_Storage_Abstract
 
             if (isset($result[$msgId]['inqueue']) && ($result[$msgId]['inqueue'] === true)) {
                 if (!rename($spoolPath . $msgId, $sentPath . $msgId)) {
-                    throw new pmq_Client_Exception("Could not move spoolfile!");
+                    throw new dropr_Client_Exception("Could not move spoolfile!");
                 }                
             }
             

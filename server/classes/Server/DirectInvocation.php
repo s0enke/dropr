@@ -6,11 +6,11 @@
  * this is very useful if you can't wait for an asyncronous answer
  *  
  */
-interface pmq_Server_DirectInvocation
+interface dropr_Server_DirectInvocation
 {
     /**
      * @return 	string			the
      * @throws	Exception		
      */
-    public function invokeMessage(pmq_Server_Message $message);
+    public function invokeMessage(dropr_Server_Message $message);
 }

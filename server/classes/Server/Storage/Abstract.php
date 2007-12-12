@@ -1,5 +1,5 @@
 <?php
-abstract class pmq_Server_Storage_Abstract
+abstract class dropr_Server_Storage_Abstract
 {
 
     const TYPE_STREAM = 1;
@@ -9,13 +9,13 @@ abstract class pmq_Server_Storage_Abstract
     
     public static function factory($type, $dsn)
     {
-        $className = 'pmq_Server_Storage_' . ucfirst($type);
+        $className = 'dropr_Server_Storage_' . ucfirst($type);
         return new $className($dsn);
     }
     
     abstract public function getType();
     
-    abstract public function put(pmq_Server_Message $message);
+    abstract public function put(dropr_Server_Message $message);
     
     /**
      * @return bool

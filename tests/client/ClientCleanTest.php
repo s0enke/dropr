@@ -24,7 +24,7 @@ class ClientCleanTest extends PHPUnit_Framework_TestCase
 	{
 	    echo $this->storage->countQueuedMessages() . " unbearbeitete Nachrichten\n";
 	    echo $this->storage->countSentMessages()   . " gesendete Nachrichten\n";
-	    echo $this->storage->wipeSentMessages(60*24*7+925)   . " geloeschte Nachrichten\n";
+	    echo $this->storage->wipeSentMessages(5)   . " geloeschte Nachrichten\n";
 	}
 	
 }

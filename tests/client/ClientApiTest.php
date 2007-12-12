@@ -32,7 +32,7 @@ class ClientApiTest extends PHPUnit_Framework_TestCase
         
         while ($i < 1000) {
 
-		    $msg = $this->queue->createMessage($m, $peer, 'geloetchannel');
+		    $msg = $this->queue->createMessage($m, $peer);
 	        $msg->queue();
             $i++;
             echo '.';

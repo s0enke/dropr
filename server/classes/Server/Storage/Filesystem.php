@@ -19,7 +19,7 @@ class dropr_Server_Storage_Filesystem extends dropr_Server_Storage_Abstract
 	    
 	    if (!is_dir($path)) {
 	        if (!@mkdir($path, 0755)) {
-	            throw new Dropr_Server_Exception("Could not create Queue Directory $path");
+	            throw new dropr_Server_Exception("Could not create Queue Directory $path");
 	        }
 	    }
 	    

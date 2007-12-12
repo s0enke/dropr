@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 COMMAND="$1"
 PARAM="$2"
 

@@ -16,7 +16,7 @@ class ClientApiTest extends PHPUnit_Framework_TestCase
 	{
         require '../../client/classes/autoload.php';		
 
-        $this->storage = dropr_Client_Storage_Abstract::factory('filesystem', '/home/erdmann/dopr/clientqueue');
+        $this->storage = dropr_Client_Storage_Abstract::factory('filesystem', '/home/erdmann/dropr/clientqueue');
         $this->queue = new dropr_Client($this->storage);
 	}
 

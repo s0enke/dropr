@@ -36,6 +36,6 @@ abstract class dropr_Server_Storage_Abstract
      * 
      * @throws 	pmq_Server_Exception
      */
-    abstract public function setProcessed(pmq_Server_Message $message);
+    abstract public function setProcessed(dropr_Server_Message $message);
 
 }

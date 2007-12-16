@@ -27,4 +27,15 @@ abstract class dropr_Server_Storage_Abstract
      */
     abstract public function getMessages($type = null, $limit = null);
     
+    /**
+     * Sets a message to processed state - the implementation must move it out
+     * from the list of active messages to it's not in list of getMessages
+     * anymore
+     *
+     * @param 	pmq_Server_Message $message
+     * 
+     * @throws 	pmq_Server_Exception
+     */
+    abstract public function setProcessed(pmq_Server_Message $message);
+
 }

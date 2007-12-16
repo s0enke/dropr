@@ -1,16 +1,10 @@
 <?php
 /**
- * Autoloader for the Message Queue client
+ * Autoloader for dropr server classes
  * 
  * @author Soenke Ruempler 
  */
-
-/*
- * set the include path
- */
-set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__)));
-
-function dropr_Client_Autoload($className)
+function dropr_Server_Autoload($className)
 {
   	if (strpos($className, 'dropr_') !== 0) {
             return;
@@ -20,4 +14,4 @@ function dropr_Client_Autoload($className)
   	require realpath(dirname(__FILE__)) . '/' . $file;
 }
 
-spl_autoload_register('dropr_Client_Autoload');
+spl_autoload_register('dropr_Server_Autoload');

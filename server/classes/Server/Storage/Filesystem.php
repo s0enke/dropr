@@ -6,6 +6,12 @@ class dropr_Server_Storage_Filesystem extends dropr_Server_Storage_Abstract
     
     const SPOOLDIR_TYPE_PROCESSED = 'done';
     
+    /**
+     * This is the separator of metadata encoding in the filename
+     *
+     */
+    const SPOOLFILE_METADATA_SEPARATOR = ':';
+    
     private $path;
 	
 	protected function __construct($path)
@@ -88,7 +94,7 @@ class dropr_Server_Storage_Filesystem extends dropr_Server_Storage_Abstract
                 break;
             }
                         
-            list($priority, $client, $messageId) = explode('_', $fName, 3);
+            list($priority, $messageId, $client) = explode(self::SPOOLFILE_METADATA_SEPARATOR, $fName, 3);
             
             $filePath = $spoolDir . DIRECTORY_SEPARATOR . $fName; 
 
@@ -116,10 +122,12 @@ class dropr_Server_Storage_Filesystem extends dropr_Server_Storage_Abstract
      */
     private function buildMessagePath(dropr_Server_Message $message, $type)
     {
-        /// XXX encode base64 ?
-        // build the path spoolpath/pri_client_msgid
-        //XXX is this good? client before ID sort!
-        return $this->getSpoolPath($type, $message->getChannel()) . DIRECTORY_SEPARATOR . $message->getPriority() . '_' . $message->getClient() . '_' . $message->getId();        
+        /*
+         * The server storage metadata separator is ":" because there
+         * is a conflict with the client using underscores
+         */
+       
+    	return $this->getSpoolPath($type, $message->getChannel()) . DIRECTORY_SEPARATOR . $message->getPriority() . self::SPOOLFILE_METADATA_SEPARATOR . $message->getId() .  self::SPOOLFILE_METADATA_SEPARATOR . $message->getClient();        
     }
     
 }

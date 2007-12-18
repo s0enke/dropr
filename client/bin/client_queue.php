@@ -2,6 +2,10 @@
 <?php
 ini_set('display_errors', false);
 
+// logging is not completed
+#ini_set('log_errors', 1);
+#ini_set('error_log', dirname(__FILE__) . '/dropr.log');
+
 require realpath(dirname(__FILE__) . '/..') . '/classes/autoload.php';
 /*
  * Config
@@ -41,7 +45,12 @@ while ($continue && ($msgCount < 1000)) {
         foreach ($queuedMessages as $peerKey => $peerMessages) {
     
             $peer = dropr_Client_Peer_Abstract::getInstance($peerKey);
-            $result = $peer->send($peerMessages, $storage);
+            try {
+                $result = $peer->send($peerMessages, $storage);
+            } catch (Exception $e) {
+                // something went wrong, lets log it
+                //error_log("Caught an Exception while sending messages: " . $e->getMessage());
+            }
             $storage->checkSentMessages($peerMessages, $result);
         }
     }

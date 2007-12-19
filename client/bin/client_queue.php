@@ -33,12 +33,15 @@ function handleAlarm($sig)
 }
 pcntl_signal(SIGALRM, 'handleAlarm');
 
+$peerTimeout = 10;
+$peerKeyBlackList = array();
+
 $msgCount = 0;
 declare(ticks = 1);
 while ($continue && ($msgCount < 1000)) {
     unset($queuedMessages, $peerMessages);
 
-    if ($queuedMessages = $storage->getQueuedMessages(1000)) {
+    if ($queuedMessages = $storage->getQueuedMessages(1000, $peerKeyBlackList)) {
 
         $msgCount += count($queuedMessages, COUNT_RECURSIVE);
 
@@ -47,11 +50,13 @@ while ($continue && ($msgCount < 1000)) {
             $peer = dropr_Client_Peer_Abstract::getInstance($peerKey);
             try {
                 $result = $peer->send($peerMessages, $storage);
+                $storage->checkSentMessages($peerMessages, $result);
             } catch (Exception $e) {
+                $peerKeyBlackList[$peerKey] = time() + $peerTimeout;
+
                 // something went wrong, lets log it
                 //error_log("Caught an Exception while sending messages: " . $e->getMessage());
             }
-            $storage->checkSentMessages($peerMessages, $result);
         }
     }
     else {

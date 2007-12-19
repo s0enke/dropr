@@ -69,11 +69,19 @@ class dropr_Client_Storage_Filesystem extends dropr_Client_Storage_Abstract
         return $fName;
     }
 
-    public function getQueuedMessages($limit = null)
+    public function getQueuedMessages($limit = null, &$peerKeyBlackList = null)
     {
+        // expire blacklisted peers
+        $now = time();
+        foreach ($peerKeyBlackList as $peerKey => $timeout) {
+            if ($timeout > $now) {
+                unset($peerKeyBlackList[$peerKey]);
+            }
+        }
+
         $spoolDir = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR;
         $fNames = scandir($spoolDir);
-        
+
         // unset the "." and the ".."
         unset($fNames[0]);
         unset($fNames[1]);
@@ -98,7 +106,9 @@ class dropr_Client_Storage_Filesystem extends dropr_Client_Storage_Abstract
             );
             $message->restoreId($fName);
 
-            $messages[$decodedPeerKey][] = $message;
+            if (!isset($peerKeyBlackList[$decodedPeerKey])) {
+                $messages[$decodedPeerKey][] = $message;
+            }
         }
 
         return $messages;

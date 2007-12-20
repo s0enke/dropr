@@ -74,7 +74,7 @@ class dropr_Client_Storage_Filesystem extends dropr_Client_Storage_Abstract
         // expire blacklisted peers
         $now = time();
         foreach ($peerKeyBlackList as $peerKey => $timeout) {
-            if ($timeout > $now) {
+            if ($now > $timeout) {
                 unset($peerKeyBlackList[$peerKey]);
             }
         }

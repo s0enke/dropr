@@ -8,8 +8,16 @@ STORAGE=filesystem
 PHP=/usr/bin/php
 
 CWD=`dirname "$CONFIG"`
-[ -e "$CONFIG" ] && . "$CONFIG" || \
-[ -e /etc/default/dropr ] && . /etc/default/dropr
+
+if [ -e "$CONFIG" ]
+then
+    . "$CONFIG"
+else
+    if [ -e /etc/default/dropr ]
+    then
+        . /etc/default/dropr
+    fi
+fi
 
 clean_up()
 {

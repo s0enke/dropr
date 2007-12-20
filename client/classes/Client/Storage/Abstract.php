@@ -35,7 +35,7 @@ abstract class dropr_Client_Storage_Abstract
      * 
      * @return array	An array of dropr_Client_Message objects 
      */
-    abstract public function getQueuedMessages($limit = null, $peerKeyBlackList = null);
+    abstract public function getQueuedMessages($limit = null, &$peerKeyBlackList = null);
     
     /**
      * @return dropr_Client_Message

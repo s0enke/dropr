@@ -86,13 +86,14 @@ class dropr_Client_Storage_Filesystem extends dropr_Client_Storage_Abstract
         unset($fNames[0]);
         unset($fNames[1]);
 
+        $c = 1;
         $messages = array();
         foreach($fNames as $k => $fName) {
 
-            if ($limit && $k > $limit) {
+            if ($limit && ($c > $limit)) {
                 break;
             }
-                        
+
             list($priority, $timeStamp, $encodedPeerKey, $encodedChannel) = explode('_', $fName, 4);
             $decodedPeerKey = $this->decodeFromFs($encodedPeerKey);
             $decodedChannel = $this->decodeFromFs($encodedChannel);
@@ -108,6 +109,7 @@ class dropr_Client_Storage_Filesystem extends dropr_Client_Storage_Abstract
 
             if (!isset($peerKeyBlackList[$decodedPeerKey])) {
                 $messages[$decodedPeerKey][] = $message;
+                $c++;
             }
         }
 

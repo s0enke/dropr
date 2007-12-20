@@ -33,7 +33,8 @@ function handleAlarm($sig)
 }
 pcntl_signal(SIGALRM, 'handleAlarm');
 
-$peerTimeout = 10;
+$sleepTimeout = 20;
+$peerTimeout  = 60;
 $peerKeyBlackList = array();
 
 $msgCount = 0;
@@ -43,13 +44,12 @@ while ($continue && ($msgCount < 1000)) {
 
     if ($queuedMessages = $storage->getQueuedMessages(1000, $peerKeyBlackList)) {
 
-        $msgCount += count($queuedMessages, COUNT_RECURSIVE);
-
         foreach ($queuedMessages as $peerKey => $peerMessages) {
-    
+ 
             $peer = dropr_Client_Peer_Abstract::getInstance($peerKey);
             try {
                 $result = $peer->send($peerMessages, $storage);
+                $msgCount += count($peerMessages, COUNT_RECURSIVE);
                 $storage->checkSentMessages($peerMessages, $result);
             } catch (Exception $e) {
                 $peerKeyBlackList[$peerKey] = time() + $peerTimeout;
@@ -60,7 +60,7 @@ while ($continue && ($msgCount < 1000)) {
         }
     }
     else {
-        pcntl_alarm(4);
+        pcntl_alarm($sleepTimeout);
         @msg_receive($ipcChannel, 1, $msgType, 512, $msg, true, 0, $msgError);
         pcntl_alarm(0);
     }

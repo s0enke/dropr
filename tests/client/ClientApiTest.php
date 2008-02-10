@@ -14,15 +14,15 @@ class ClientApiTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
 	{
-        require '../../client/classes/autoload.php';		
+        require '../../classes/dropr.php';		
 
-        $this->storage = dropr_Client_Storage_Abstract::factory('filesystem', '/home/erdmann/dropr/clientqueue');
+        $this->storage = dropr_Client_Storage_Abstract::factory('filesystem', '/var/spool/dropr/client');
         $this->queue = new dropr_Client($this->storage);
 	}
 
 	public function testPut()
 	{
-		$peer = dropr_Client_Peer_Abstract::getInstance('HttpUpload', 'http://dropr.erdmann.test/tests/server/server.php');
+		$peer = dropr_Client_Peer_Abstract::getInstance('HttpUpload', 'http://localhost/droprserver/');
 
     	$dt = time();
         $i=0;

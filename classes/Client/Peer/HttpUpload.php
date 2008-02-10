@@ -65,6 +65,8 @@ class dropr_Client_Peer_HttpUpload extends dropr_Client_Peer_Abstract
         foreach ($connomains as $i => $url) {
             $conn[$i] = curl_init();
             
+            // set the timeout to 60 seconds
+            curl_setopt($conn[$i], CURLOPT_TIMEOUT, 60);
             curl_setopt($conn[$i], CURLOPT_URL, $url);
             curl_setopt($conn[$i], CURLOPT_POST, true);
             curl_setopt($conn[$i], CURLOPT_POSTFIELDS, $uploadFields);

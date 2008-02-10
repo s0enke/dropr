@@ -19,9 +19,13 @@ class dropr_Client
             mkdir($ipcPath, 0777, true);
         }
         if (!is_file($channelName)) {
-            posix_mknod($channelName, 0666);    
+            if (!posix_mknod($channelName, 0666)) {
+            	throw new Exception("could not mknod $channelName!");
+            }    
         }
-        $this->ipcChannel = msg_get_queue(ftok($channelName,'*'));
+        
+        dropr::log("doing ftok($channelName)", LOG_DEBUG);
+        $this->ipcChannel = msg_get_queue(ftok($channelName, '*'));
 	}
 
 	public function getIpcChannel()

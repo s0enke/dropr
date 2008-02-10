@@ -47,12 +47,13 @@ class dropr_Server_Storage_Filesystem extends dropr_Server_Storage_Abstract
             $proc = $this->buildMessagePath($message, self::SPOOLDIR_TYPE_SPOOL);
             $done = $this->buildMessagePath($message, self::SPOOLDIR_TYPE_PROCESSED);
 
-			/* @var $file SplFileInfo */
-
             if (file_exists ($proc) || file_exists ($done)) {
                 return;
             }
-            if (!rename($src, $proc)) {
+            
+            // sometimes php throws a warning but returns true and the file is moved
+            // .. maybe NFS issue so we have to use the @-operator
+            if (!@rename($src, $proc)) {
                 throw new dropr_Server_Exception("Could not save $src to $proc");
             }
         } else {

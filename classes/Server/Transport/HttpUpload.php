@@ -16,7 +16,8 @@ class dropr_Server_Transport_HttpUpload extends dropr_Server_Transport_Abstract
         
         // xxx check the check
         if (!isset($_POST['metaData']) || !is_string($_POST['metaData']) || (!$metadata = unserialize($_POST['metaData']))) {
-            throw new Exception("No client metadata set!");
+            error_log(print_r($_POST['metaData'], true));
+        	throw new Exception("No client metadata set!");
         }
         
         #print_r($_FILES);exit;

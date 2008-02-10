@@ -29,7 +29,7 @@ trap clean_up SIGHUP SIGINT SIGTERM
 
 while [ 1 ]
 do
-    $PHP $RUN $STORAGE $SPOOLDIR &
+    $PHP $RUN $STORAGE $SPOOLDIR $LOG_LEVEL &
     SLAVE=$!
     wait $SLAVE
 done

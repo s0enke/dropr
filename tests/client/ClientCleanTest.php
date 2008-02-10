@@ -14,9 +14,9 @@ class ClientCleanTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
 	{
-        require '../../client/classes/autoload.php';		
+        require '../../classes/dropr.php';		
 
-        $this->storage = dropr_Client_Storage_Abstract::factory('filesystem', '/home/erdmann/dropr/clientqueue');
+        $this->storage = dropr_Client_Storage_Abstract::factory('filesystem', realpath('./clientqueue'));
         $this->queue = new dropr_Client($this->storage);
 	}
 

@@ -116,8 +116,8 @@ class dropr_Server_Storage_Filesystem extends dropr_Server_Storage_Abstract
     {
         
     }
-    
-    
+
+
     /**
      * Build the spoolpath for a message
      */
@@ -130,5 +130,33 @@ class dropr_Server_Storage_Filesystem extends dropr_Server_Storage_Abstract
        
     	return $this->getSpoolPath($type, $message->getChannel()) . DIRECTORY_SEPARATOR . $message->getPriority() . self::SPOOLFILE_METADATA_SEPARATOR . $message->getId() .  self::SPOOLFILE_METADATA_SEPARATOR . $message->getClient();        
     }
-    
+
+    public function countQueuedMessages($channel = 'common')
+    {
+        $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL, $channel) . DIRECTORY_SEPARATOR;
+        return count(scandir($spoolPath))-2;
+    }
+
+    public function countProcessedMessages($channel = 'common')
+    {
+        $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_PROCESSED, $channel) . DIRECTORY_SEPARATOR;
+        return count(scandir($spoolPath))-2;
+    }
+
+    public function wipeSentMessages($olderThanMinutes, $channel = 'common')
+    {
+        $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_PROCESSED, $channel) . DIRECTORY_SEPARATOR;
+        $dirIter = new DirectoryIterator($spoolPath);
+        $time = time()-($olderThanMinutes*60);
+        $c = 0;
+        foreach ($dirIter as $fInfo) {
+            if (($fInfo->getATime() < $time) && $fInfo->isFile()) {
+
+                unlink($spoolPath . $fInfo->getFilename());
+                $c++;
+            }
+        }
+        return $c;
+    }
+
 }

@@ -1,19 +1,19 @@
 <?php
 class dropr_Server_Storage_Filesystem extends dropr_Server_Storage_Abstract 
 {
-    
+
     const SPOOLDIR_TYPE_SPOOL = 'proc';
-    
+
     const SPOOLDIR_TYPE_PROCESSED = 'done';
-    
+
     /**
      * This is the separator of metadata encoding in the filename
      *
      */
     const SPOOLFILE_METADATA_SEPARATOR = ':';
-    
+
     private $path;
-	
+
 	protected function __construct($path)
 	{
 	    
@@ -73,12 +73,12 @@ class dropr_Server_Storage_Filesystem extends dropr_Server_Storage_Abstract
         
         return $path;
     }
-    
+
     public function getType()
     {
         return self::TYPE_FILE;
     }
-    
+
     public function getMessages($channel = 'common', $limit = null)
     {
         $spoolDir = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL, $channel) . DIRECTORY_SEPARATOR;
@@ -106,12 +106,12 @@ class dropr_Server_Storage_Filesystem extends dropr_Server_Storage_Abstract
 
         return $messages;
     }
-    
+
     public function setProcessed(dropr_Server_Message $message)
     {
         return rename($this->buildMessagePath($message, self::SPOOLDIR_TYPE_SPOOL), $this->buildMessagePath($message, self::SPOOLDIR_TYPE_PROCESSED));
     }
-    
+
     public function pollProcessed($messageId)
     {
         
@@ -129,6 +129,36 @@ class dropr_Server_Storage_Filesystem extends dropr_Server_Storage_Abstract
          */
        
     	return $this->getSpoolPath($type, $message->getChannel()) . DIRECTORY_SEPARATOR . $message->getPriority() . self::SPOOLFILE_METADATA_SEPARATOR . $message->getId() .  self::SPOOLFILE_METADATA_SEPARATOR . $message->getClient();        
+    }
+
+    private function getChannels($dir)
+    {
+        $channels = scandir($dir);
+
+        foreach (array('.', '..') as $del) {
+            $key = array_search($del, $channels, true);
+            if (false !== $key) {
+                array_splice($channels, $key, 1);
+            }
+        }
+
+        foreach ($channels as $k => $channel) {
+            $channels[$k] = base64_decode($channel);
+        }
+
+        return $channels;
+    }
+
+    public function getQueuedChannels()
+    {
+        $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_SPOOL, '');
+        return $this->getChannels($spoolPath);
+    }
+
+    public function getProcessedChannels()
+    {
+        $spoolPath = $this->getSpoolPath(self::SPOOLDIR_TYPE_PROCESSED, '');
+        return $this->getChannels($spoolPath);
     }
 
     public function countQueuedMessages($channel = 'common')

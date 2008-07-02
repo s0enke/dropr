@@ -119,7 +119,7 @@ class dropr_Client_Storage_Filesystem extends dropr_Client_Storage_Abstract
     /**
      * 
      */
-    public function getMessage($messageId, dropr_Client_Peer $peer)
+    public function getMessage($messageId, dropr_Client_Peer_Abstract $peer)
     {
         return $this->getPeerSpoolPath($peer, self::SPOOLDIR_TYPE_SPOOL) . DIRECTORY_SEPARATOR . $messageId;
     }

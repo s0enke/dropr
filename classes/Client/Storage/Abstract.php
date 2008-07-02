@@ -40,7 +40,7 @@ abstract class dropr_Client_Storage_Abstract
     /**
      * @return dropr_Client_Message
      */
-    abstract public function getMessage($messageId, dropr_Client_Peer $peer);
+    abstract public function getMessage($messageId, dropr_Client_Peer_Abstract $peer);
     
     abstract public function getType();
 

@@ -1,7 +1,7 @@
 SPOOLDIR=/var/spool/dropr/client/
 PIDFILE=/var/run/$NAME.pid
 
-BIN=/home/soenke/svn/pmq/branches/debug-dev/client/bin/
+BIN=/home/soenke/svn/dropr/branches/debug-dev/client/bin/
 RUN=$BIN/client_queue.php
 DAEMON=$BIN/$NAME
 

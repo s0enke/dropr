@@ -1,20 +1,64 @@
 <?php
+/**
+ * dropr
+ *
+ * Copyright (c) 2007 - 2008 by the dropr project https://www.dropr.org/
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *
+ *   * Neither the name of Sebastian Bergmann nor the names of his
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @package    dropr
+ * @author     Soenke Ruempler <soenke@jimdo.com>
+ * @author     Boris Erdmann <boris@jimdo.com>
+ * @copyright  2007-2008 Soenke Ruempler, Boris Erdmann
+ * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
+ */
+
 class dropr_Client_Peer_HttpUpload extends dropr_Client_Peer_Abstract
 {
     const TYPE_QUEUE = 1;
     
     const TYPE_DIRECT = 2;
     
-    public function connect()
-    {
-        // hier connection aufbauen etc
-    }
-
     public function send(array &$messages)
     {
         return $this->httpFileUpload($messages, self::TYPE_QUEUE);
     }
 
+    /**
+     * Upload Messages to peer
+     *
+     * @param array $messages
+     * @param int $type     This is the TYPE_QUEUE or TYPE_DIRECT
+     * @return array    The response from the server
+     */
     private function httpFileUpload(array &$messages, $type) {
 
         $uploadFields = array();
@@ -117,11 +161,14 @@ class dropr_Client_Peer_HttpUpload extends dropr_Client_Peer_Abstract
         return $return;
     }
     
-    public function poll(array $messageIds)
-    {
-        
-    }
-    
+    /**
+     * synchronous message transfer
+     * 
+     * this is not implemented completely
+     *
+     * @param dropr_Client_Message $message
+     * @return bool
+     */
     public function sendDirectly(dropr_Client_Message $message)
     {
         return $this->httpFileUpload($messages, self::TYPE_DIRECT);

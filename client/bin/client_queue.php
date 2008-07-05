@@ -112,6 +112,12 @@ function handleKill($sig)
     $continue = false;
 }
 
+    
+function handleAlarm($sig) 
+{ 
+    return; 
+}
+
 /*
  * register the signal handlers
  *
@@ -121,7 +127,11 @@ function handleKill($sig)
 pcntl_signal(SIGUSR1, 'handleKill');
 pcntl_signal(SIGTERM, 'handleKill');
 pcntl_signal(SIGINT,  'handleKill');
-pcntl_signal(SIGALRM, 'handleKill');
+
+/*
+ * handle the alarm (wake-up from sleep)
+ */ 
+pcntl_signal(SIGALRM,  'handleAlarm');
 
 
 while ($continue && ($msgCount < $maxMessagesPerLife)) {

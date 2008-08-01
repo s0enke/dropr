@@ -17,7 +17,7 @@
 #     the documentation and/or other materials provided with the
 #     distribution.
 #
-#   * Neither the name of Sebastian Bergmann nor the names of his
+#   * Neither the name of dropr nor the names of its
 #     contributors may be used to endorse or promote products derived
 #     from this software without specific prior written permission.
 #
@@ -70,7 +70,7 @@ then
       chown -R www-data:www-data $SPOOLDIR
 
       ln -s $INITSCRIPT /etc/init.d/dropr
-      ln -s $CONFIG /etc/default/dropr
+      cp $CONFIG /etc/default/dropr
 
       echo
       update-rc.d dropr defaults 99 01

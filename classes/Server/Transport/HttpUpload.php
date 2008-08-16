@@ -46,6 +46,7 @@ class dropr_Server_Transport_HttpUpload extends dropr_Server_Transport_Abstract
     
     public function handle()
     {
+        
         // check for the http header of the client
         if (!isset($_POST['client']) || !is_string($_POST['client'])) {
             throw new Exception("No client header set!");
@@ -58,7 +59,7 @@ class dropr_Server_Transport_HttpUpload extends dropr_Server_Transport_Abstract
         
         // xxx check the check
         if (!isset($_POST['metaData']) || !is_string($_POST['metaData']) || (!$metadata = unserialize($_POST['metaData']))) {
-        	throw new Exception("No client metadata set - do you have magic_quotes enabled?");
+        	throw new Exception("No client metadata set or not readable!");
         }
         
         #print_r($_FILES);exit;

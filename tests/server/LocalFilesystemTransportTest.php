@@ -41,60 +41,58 @@
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  */
 
-abstract class dropr_Server_Storage_Abstract
+/**
+ * test example for bypassing the client queue for local delivery
+ * 
+ * basically this is an inter process communication but with 
+ * durability (messages are written to a durable storage)
+ * 
+ * @author Soenke Ruempler
+ */
+
+require dirname (__FILE__) . '/../../classes/dropr.php';  
+
+class LocalFilesystemTransportTest extends PHPUnit_Framework_TestCase
 {
-
-    const TYPE_STREAM = 1;
-    const TYPE_MEMORY = 2;
-    const TYPE_FILE   = 3;
-
-
     /**
-     * Create a server storage instance
-     *
-     * @param string $type
-     * @param string $dsn
-     * @return dropr_Server_Storage_Abstract
+     * @var dropr_Server_Storage_Filesystem
      */
-    public static function factory($type, $dsn)
+    private $storage;
+    
+    private $dir;
+
+    public function setUp()
+	{
+        $this->dir = dirname (__FILE__) . '/testspool/server';
+        $this->storage = dropr_Server_Storage_Abstract::factory('Filesystem', $this->dir);
+	}
+
+	public function testPut()
+	{
+        $message = new dropr_Server_Message(
+            'localhost',
+            uniqid(null, true),
+            $message = 'testmessage',
+            'common',
+            1,
+            time()
+        );
+        
+        $this->storage->put($message);
+        
+        $messages = $this->storage->getMessages('common');
+        
+        $this->assertEquals(1, count($messages));
+        $this->assertEquals('testmessage', (string)$messages[0]);
+        
+        
+	}
+	
+    protected function tearDown()
     {
-        $className = 'dropr_Server_Storage_' . ucfirst($type);
-        return new $className($dsn);
+        // cleanup queue
+        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($this->dir)) as $f) {
+            unlink($f);
+        }
     }
-
-    abstract public function getType();
-
-    abstract public function put(dropr_Server_Message $message);
-
-    /**
-     * @return bool
-     */
-    abstract public function pollProcessed($messageId);
-
-    /**
-     * @return array
-     */
-    abstract public function getMessages($channel = 'common', $limit = null);
-
-    /**
-     * Sets a message to processed state - the implementation must move it out
-     * from the list of active messages to it's not in list of getMessages
-     * anymore
-     *
-     * @param 	dropr_Server_Message $message
-     * 
-     * @throws 	dropr_Server_Exception
-     */
-    abstract public function setProcessed(dropr_Server_Message $message);
-
-    abstract public function getQueuedChannels();
-
-    abstract public function getProcessedChannels();
-
-    abstract public function countQueuedMessages($channel = 'common');
-
-    abstract public function countProcessedMessages($channel = 'common');
-
-    abstract public function wipeSentMessages($olderThanMinutes, $channel = 'common');
-
 }

@@ -81,22 +81,31 @@ class dropr_Server_Storage_Filesystem extends dropr_Server_Storage_Abstract
     public function put(dropr_Server_Message $message)
     {
         $mHandle = $message->getMessage();
-        if ($mHandle instanceof SplFileInfo) {
-            // XXX typ!
+        if ($mHandle instanceof SplFileInfo || is_string($mHandle)) {
             // xxx auslagern in eigene funktion
 
-            $src  = $mHandle->getPathname();
             $proc = $this->buildMessagePath($message, self::SPOOLDIR_TYPE_SPOOL);
             $done = $this->buildMessagePath($message, self::SPOOLDIR_TYPE_PROCESSED);
-
+            
             if (file_exists ($proc) || file_exists ($done)) {
+                // the message has already been stored
+                // XXX write test!
                 return;
             }
             
-            // sometimes php throws a warning but returns true and the file is moved
-            // .. maybe NFS issue so we have to use the @-operator
-            if (!@rename($src, $proc)) {
-                throw new dropr_Server_Exception("Could not save $src to $proc");
+            if ($mHandle instanceof SplFileInfo) {
+                // handle is a file, move it
+                $src = $mHandle->getPathname();
+    
+                // sometimes php throws a warning but returns true and the file is moved
+                // .. maybe NFS issue so we have to use the @-operator
+                if (!@rename($src, $proc)) {
+                    throw new dropr_Server_Exception("Could not save $src to $proc");
+                }
+            } elseif (is_string($mHandle)) {
+                if (!file_put_contents($proc, $mHandle)) {
+                    throw new dropr_Server_Exception("Could not write content to $proc!");
+                }
             }
         } else {
             throw new dropr_Server_Exception('not implemented');

@@ -74,6 +74,10 @@ if (!isset($argv[3]) || !($logLevel = constant('LOG_' . $argv[3]))) {
 
 }
 
+/*
+ * init logging - use syslog in daemon
+ */
+dropr::setLogger(new dropr_Log_Syslog());
 dropr::setLogLevel($logLevel);
 dropr::log("logLevel is $logLevel", LOG_DEBUG);
 

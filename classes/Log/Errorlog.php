@@ -53,6 +53,6 @@ class dropr_Log_Errorlog implements dropr_Log
      */
     public function log($message, $level)
     {
-        error_log($message, $level);
+        error_log($message);
     }
 }

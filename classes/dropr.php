@@ -53,10 +53,10 @@
 class dropr 
 {
     /**
-     * The message is processed
+     * @var dropr_Log
      */
-    const MESSAGE_PROCESSED = 1;
-    
+    private static $logger;
+
     /**
      * Mapping for error-levels
      *
@@ -100,7 +100,7 @@ class dropr
     public static function log($message, $level = LOG_INFO)
     {
         if ($level <= self::$logLevel) {
-            syslog($level, $message);
+            self::getLogger()->log($message, $level);
         }
     }
     
@@ -121,6 +121,31 @@ class dropr
     {
     	self::$classRoot = $classRoot;
     }
+    
+    /**
+     * set the logger
+     * 
+     * @var $logger     dropr_Log
+     */
+    public static function setLogger(dropr_Log $logger)
+    {
+        self::$logger = $logger;
+    }
+    
+    /**
+     * Get the Logger instance
+     * 
+     * @return dropr_Log
+     */
+    public static function getLogger()
+    {
+        if (!self::$logger) {
+            // get the default error_log logger
+            self::$logger = new dropr_Log_Errorlog();
+        }
+        
+        return self::$logger;
+    }
 }
 
 /*
@@ -132,8 +157,3 @@ spl_autoload_register(array('dropr', 'autoload'));
  * set the class root path once
  */
 dropr::setClassRoot(realpath(dirname(__FILE__)) . '/');
-
-/*
- * set the syslog variables
- */
-openlog('dropr', LOG_ODELAY | LOG_PID, LOG_DAEMON);

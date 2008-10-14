@@ -41,6 +41,13 @@
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  */
 
+// dropr will not work with magic_quotes
+if (
+    (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) ||
+    (ini_get('magic_quotes_sybase') && ('off' != strtolower(ini_get('magic_quotes_sybase'))))) {
+    throw new Exception('dropr will not work with magic_quotes enabled. Please disable it in your php configuration');    
+}
+
 abstract class dropr_Server_Transport_Abstract
 {
     
@@ -106,9 +113,7 @@ abstract class dropr_Server_Transport_Abstract
         $this->storage = $storage;
     }
     
-
-    
-	/**
+    /**
      * @return dropr_Server_Storage_Abstract
      */
     protected function getStorage()

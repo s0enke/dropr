@@ -115,6 +115,13 @@ class dropr_Client_Peer_HttpUpload extends dropr_Client_Peer_Abstract
             curl_setopt($conn[$i], CURLOPT_POST, true);
             curl_setopt($conn[$i], CURLOPT_POSTFIELDS, $uploadFields);
             
+            //Set the expect header empty as workaround for cURL Bug
+            //Bug description: cURL adds Expect header if POST size is greater
+            //then 1024. Most Servers (e.x. lighttpd) do not understand this header
+            //and fail on request.
+            //Ticket #42 on dropr.org
+            curl_setopt($conn[$i], CURLOPT_HTTPHEADER, 'Expect:');
+            
             curl_setopt($conn[$i], CURLOPT_RETURNTRANSFER, 1);
             
             curl_multi_add_handle ($mh,$conn[$i]);

@@ -120,7 +120,7 @@ class dropr_Client_Peer_HttpUpload extends dropr_Client_Peer_Abstract
             //then 1024. Most Servers (e.x. lighttpd) do not understand this header
             //and fail on request.
             //Ticket #42 on dropr.org
-            curl_setopt($conn[$i], CURLOPT_HTTPHEADER, 'Expect:');
+            curl_setopt($conn[$i], CURLOPT_HTTPHEADER, array('Expect:'));
             
             curl_setopt($conn[$i], CURLOPT_RETURNTRANSFER, 1);
             

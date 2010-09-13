@@ -1,0 +1,9 @@
+SPOOLDIR=/var/spool/dropr/client/
+PIDDIR=/var/run/dropr
+PIDFILE=$PIDDIR/$NAME.pid
+
+BIN=_THISPATH_
+RUN=$BIN/client_queue.php
+DAEMON=$BIN/$NAME
+
+LOG_LEVEL=INFO

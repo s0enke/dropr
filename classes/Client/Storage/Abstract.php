@@ -57,6 +57,7 @@ abstract class dropr_Client_Storage_Abstract
             // Guess the classname from the dsn
             $className = 'dropr_Client_Storage_' . ucfirst($type);
             self::$instances[$dsn] = new $className($dsn);
+            self::$instances[$dsn]->dsn = $dsn;
         }
         
         return self::$instances[$dsn];

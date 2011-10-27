@@ -57,7 +57,8 @@ class dropr_Client_Storage_Filesystem extends dropr_Client_Storage_Abstract
 
 	protected function __construct($path)
 	{
-	    
+        parent::__construct($path);
+
 	    if (!is_string($path)) {
 	        throw new dropr_Client_Exception("No valid path given");
 	    }

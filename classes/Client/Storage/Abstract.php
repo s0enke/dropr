@@ -46,6 +46,7 @@ abstract class dropr_Client_Storage_Abstract
     const TYPE_STREAM = 1;
     const TYPE_MEMORY = 2;
     const TYPE_FILE   = 3;
+    const TYPE_DB     = 4;
 
     private static $instances = array();
     

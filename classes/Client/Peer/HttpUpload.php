@@ -91,6 +91,7 @@ class dropr_Client_Peer_HttpUpload extends dropr_Client_Peer_Abstract
                 if (!file_put_contents($filename, $content)) {
                     throw new Exception();
                 }
+                $uploadFields['f_' . $k] = '@' . $filename;
             } else {
                 throw new dropr_Client_Exception("Currently only file transport is implemented.");
             }

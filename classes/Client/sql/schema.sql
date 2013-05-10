@@ -1,8 +1,8 @@
-CREATE TABLE transaction
-(
-	transaction_id INTEGER(3) NOT NULL PRIMARY KEY AUTOINCREMENT,
-	created	INTEGER(3) NOT NULL,
-	server TEXT(32) NOT NULL,
-	payload BLOB NOT NULL,
-
-)	
+CREATE TABLE IF NOT EXISTS `dropr_client` (
+  `typ` enum('1','2') NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `ts` bigint(20) unsigned NOT NULL,
+  `payload` longblob NOT NULL,
+  PRIMARY KEY (`name`,`typ`),
+  KEY `ts` (`ts`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;

@@ -13,7 +13,7 @@ if ('' == $_DSN) {
 
 $_COMMAND = $argv[3];
 $_PARAM1  = $argv[4];
-$_PARAM2  = $argv[5];
+if (isset($argv[5])) $_PARAM2  = $argv[5];
 
 require realpath(dirname(__FILE__) . "/../..") . "/classes/dropr.php";
 $storage    = dropr_Server_Storage_Abstract::factory($_STORAGE, $_DSN);

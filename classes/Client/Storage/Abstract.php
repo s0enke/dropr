@@ -63,7 +63,13 @@ abstract class dropr_Client_Storage_Abstract
         return self::$instances[$dsn];
     }
 
-    public function getDsn() {
+    protected function __construct($dsn)
+    {
+        $this->dsn = $dsn;
+    }
+
+    public function getDsn()
+    {
         return $this->dsn;
     }
     

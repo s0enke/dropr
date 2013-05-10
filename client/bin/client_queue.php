@@ -82,7 +82,7 @@ dropr::setLogLevel($logLevel);
 dropr::log("logLevel is $logLevel", LOG_DEBUG);
 
 dropr::log("********************************************************************", LOG_INFO);
-dropr::log("Starting up with que type $argv[1] and DSN $argv[2]", LOG_INFO);
+dropr::log("Starting up with queue type $argv[1] and DSN $argv[2]", LOG_INFO);
 dropr::log("********************************************************************", LOG_INFO);
 
 try {
